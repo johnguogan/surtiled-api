@@ -1,4 +1,8 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Users, UsersDocument } from '../schemas/users.schema';
+
 
 export type User = any;
 
