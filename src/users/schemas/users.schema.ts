@@ -5,28 +5,37 @@ export type UsersDocument = Users & Document;
 @Schema()
 export class Users {
   @Prop()
+  userid: string;
+
+  @Prop()
   names: string;
 
   @Prop()
   surnames: string;
+  
+  @Prop()
+  typeId: string;
+  
+  @Prop()
+  idNumber: number;
 
-  // @Prop()
-  // typeId: string;
+  @Prop()
+  cell: number;
 
-  // @Prop()
-  // banknote: string;
+  @Prop()
+  conventional: string;
 
-  // @Prop()
-  // cell: number;
+  @Prop()
+  residence: string;
 
-  // @Prop()
-  // conventional: string;
+  @Prop()
+  email: string;
+  
+  @Prop()
+  password: string;
 
-  // @Prop()
-  // residence: string;
-
-  // @Prop()
-  // email: string;
+  @Prop()
+  role: string;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);

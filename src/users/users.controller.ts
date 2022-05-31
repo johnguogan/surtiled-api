@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Post, Req, UseGuards, Header } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import { Users } from './schemas/users.schema';
 import { UsersService } from './users.service';
 
@@ -8,15 +10,16 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Post('/register')
+  @Post('register')
   @Header('content-type', 'application/x-www-form-urlencoded')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   create(@Body() createUserDto: CreateUserDto): Promise<Users> {
     const user = this.usersService.create(createUserDto)
     return user;
   }
 
-  @Get('/list')
+  @Get('list')
+  @UseGuards(JwtAuthGuard)
   findAll(): Promise<Users[]> {
     const users = this.usersService.findAll();
     return users;
