@@ -12,6 +12,8 @@ export class ProductsController {
   @Header('content-type', 'application/x-www-form-urlencoded')
   @UseGuards(JwtAuthGuard)
   create(@Body() createProductDto: CreateProductDto): Promise<Products> {
+    console.log("cretea product: ", createProductDto);
+    
     const product = this.productsService.create(createProductDto)
     return product;
   }

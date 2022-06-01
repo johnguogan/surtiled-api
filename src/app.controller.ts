@@ -11,8 +11,12 @@ export class AppController {
   @Post('auth/login')
   async login(@Request() req) {
     console.log("user login: ", req.user);
+    // return this.authService.login(req.user)
+
+    const response = this.authService.login(req.user)
+    console.log("last response: ", response);
     
-    return this.authService.login(req.user)
+    return response;
   }
 
   @UseGuards(JwtAuthGuard)

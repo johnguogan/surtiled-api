@@ -1,23 +1,27 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { Document } from 'mongoose';
+import { Categories } from 'src/categories/schemas/categories.schema';
 
 export type ProductsDocument = Products & Document;
 @Schema()
 export class Products {
   @Prop()
-  names: string;
+  name: string;
 
   @Prop()
-  description: string;
+  code: number;
+  // @Prop()
+  // characteristic: string;
 
-  @Prop()
-  imageUrl: string;
+  // @Prop()
+  // imageUrl: string;
 
-  @Prop()
-  category: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category'})
+  category: Categories;
   
-  @Prop()
-  lookfor: string;
+  // @Prop()
+  // lookfor: string;
 
   @Prop()
   price: number;
@@ -28,14 +32,14 @@ export class Products {
   @Prop()
   featured: boolean;
 
-  @Prop()
-  review: number;
+  // @Prop()
+  // review: number;
 
-  @Prop()
-  reviewNumber: number;
+  // @Prop()
+  // reviewNumber: number;
   
-  @Prop()
-  relatedKey: string[];
+  // @Prop()
+  // relatedKey: string[];
 
 }
 
