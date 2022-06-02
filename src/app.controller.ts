@@ -7,23 +7,23 @@ import { LocalAuthGuard } from './auth/local-auth.guard';
 export class AppController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
-  async login(@Request() req) {
-    console.log("user login: ", req.user);
-    // return this.authService.login(req.user)
+  // @UseGuards(LocalAuthGuard)
+  // @Post('auth/login')
+  // async login(@Request() req) {
+  //   console.log("user login: ", req.user);
+  //   // return this.authService.login(req.user)
 
-    const response = this.authService.login(req.user)
-    console.log("last response: ", response);
+  //   const response = this.authService.login(req.user)
+  //   console.log("last response: ", response);
     
-    return response;
-  }
+  //   return response;
+  // }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    console.log("profile: ");
+  // @UseGuards(JwtAuthGuard)
+  // @Get('profile')
+  // getProfile(@Request() req) {
+  //   console.log("profile: ");
     
-    return req.user;
-  }
+  //   return req.user;
+  // }
 }

@@ -3,20 +3,33 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { MongooseModule } from '@nestjs/mongoose';
+// import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categoies.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entity/user.entity';
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
-    MongooseModule.forRoot('mongodb+srv://dderabin:qwert@cluster0.lwrwf.mongodb.net/surtiled', {
-      connectionFactory: (connection) => {
-        connection.plugin(require('mongoose-autopopulate'));
-        return connection
-      }
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'surtiled_db',
+      // entities: [User],
+      autoLoadEntities: true,
+      synchronize: true,
     }),
+    // MongooseModule.forRoot('mongodb+srv://dderabin:qwert@cluster0.lwrwf.mongodb.net/surtiled', {
+    //   connectionFactory: (connection) => {
+    //     connection.plugin(require('mongoose-autopopulate'));
+    //     return connection
+    //   }
+    // }),
     CategoriesModule,
     ProductsModule,
   ],

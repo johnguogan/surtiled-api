@@ -1,40 +1,31 @@
-import { Model } from 'mongoose';
-import { Body, Injectable, Param } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Users, UsersDocument } from './schemas/users.schema';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-
-export type User = any;
+import { User } from './entity/user.entity';
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>
+  ) {}
 
-  constructor(@InjectModel(Users.name) private usersModel: Model<UsersDocument>) {}
-
-  async create (createUserDto: CreateUserDto): Promise<Users> {
-    const createdUser = new this.usersModel(createUserDto);
-    return createdUser.save();
+  async create (createUserDto: CreateUserDto) {
+    return await this.usersRepository.save(createUserDto).then(res => res).catch(e => console.log(e));
   }
 
-  async findOne(username: string): Promise<User | undefined> {
-    // this.usersModel.find().exec();
-    // return this.users.find(user => user.username === username);
-    return this.usersModel.find({userid: username});
+  async findOne(userid: string): Promise<User> {
+    console.log("userservice: userid: ", userid);
+    
+    return await this.usersRepository.findOne({where: {userid}});
   }
 
-  async findAll(): Promise<Users[]>{
-    return this.usersModel.find().exec();
+  findAll(): Promise<User[]>{
+    return this.usersRepository.find();
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.usersRepository.delete(id)
   }
 }

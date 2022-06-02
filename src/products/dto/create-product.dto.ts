@@ -3,7 +3,7 @@ export class CreateProductDto {
     readonly code: number;
     // readonly characteristic: string;
     // readonly imageUrl: string;
-    readonly category: string;
+    // readonly category: string;
     // readonly lookfor: string;
     readonly price: number;
     readonly balance: number;
@@ -12,4 +12,3 @@ export class CreateProductDto {
     // readonly  reviewNumber: number;
     // readonly relatedKey: string[];
 }
-  

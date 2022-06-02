@@ -8,6 +8,6 @@ export class CreateUserDto {
     readonly conventional: string;
     readonly residence: string;
     readonly email: string;
-    readonly password: string;
+    password: string;
     readonly role: string;
 }
