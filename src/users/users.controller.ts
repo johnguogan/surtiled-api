@@ -13,8 +13,6 @@ export class UsersController {
   @Header('content-type', 'application/x-www-form-urlencoded')
   // @UseGuards(JwtAuthGuard)
   create(@Body() createUserDto: CreateUserDto) {
-    console.log("register request, ", createUserDto);
-    
     const user = this.usersService.create(createUserDto)
     return user;
   }

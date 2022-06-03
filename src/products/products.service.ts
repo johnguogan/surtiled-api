@@ -25,6 +25,27 @@ export class ProductsService {
   }
 
   async findAll(): Promise<Product[]>{
-    return this.productRepository.find();
+    // this.productRepository.createQueryBuilder('product')
+    //   .innerJoin('product.categoryId', 'category')
+    return this.productRepository.find({
+      relations: ['category'],
+      // where: { category: {id: i}}
+    });
+  }
+
+  async findGroup(id: number): Promise<Product[]>{
+    // this.productRepository.createQueryBuilder('product')
+    //   .innerJoin('product.categoryId', 'category')
+    return this.productRepository.find({
+      where: { categoryId: id }
+    });
+  }
+
+  async update(id: number, data: any) {
+    return await this.productRepository.update({id}, data)
+  }
+
+  async remove(id: number) {
+    await this.productRepository.delete({id})
   }
 }

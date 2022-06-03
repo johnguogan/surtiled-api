@@ -1,5 +1,6 @@
-import { Category } from 'src/categories/category.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Category } from 'src/categories/entity/category.entity';
+import internal from 'stream';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Product {
@@ -16,16 +17,15 @@ export class Product {
 
   // @Column()
   // imageUrl: string;
-
-  
-  // @Column()
-  // lookfor: string;
   
   @Column()
   price: number;
   
   @Column()
   balance: number;
+
+  @Column()
+  color: string;
   
   @Column()
   featured: boolean;
@@ -36,9 +36,10 @@ export class Product {
   // @Column()
   // reviewNumber: number;
   
-  // @Column()
-  // relatedKey: string[];
+  @Column()
+  categoryId: number;
   
-  // @ManyToOne(() => Category, (category) => category.label)
-  // category: Category[];
+  @ManyToOne(() => Category, (category) => category.products, { eager: false, onDelete: 'CASCADE' })
+  // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})
+  category: Category[];
 }

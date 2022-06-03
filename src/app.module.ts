@@ -24,12 +24,6 @@ import { User } from './users/entity/user.entity';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    // MongooseModule.forRoot('mongodb+srv://dderabin:qwert@cluster0.lwrwf.mongodb.net/surtiled', {
-    //   connectionFactory: (connection) => {
-    //     connection.plugin(require('mongoose-autopopulate'));
-    //     return connection
-    //   }
-    // }),
     CategoriesModule,
     ProductsModule,
   ],

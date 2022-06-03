@@ -1,3 +1,4 @@
+import { Product } from 'src/products/entity/product.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
@@ -8,7 +9,6 @@ export class Category {
   @Column()
   label: string;
 
-  // @OneToMany(() => Book, book => book.user)
-  //   books?: Book[];
-
+  @OneToMany(type => Product, (product) => product.category)
+  products: Product;
 }
