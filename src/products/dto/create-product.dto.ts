@@ -4,7 +4,7 @@ export class CreateProductDto {
     readonly name: string;
     readonly code: number;
     // readonly characteristic: string;
-    // readonly imageUrl: string;
+    readonly imageName: string;
     readonly price: number;
     readonly balance: number;
     readonly color: string;

@@ -1,6 +1,6 @@
 import { Category } from 'src/categories/entity/category.entity';
 import internal from 'stream';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
 export class Product {
@@ -12,11 +12,12 @@ export class Product {
 
   @Column()
   code: number;
+
   // @Column()
   // characteristic: string;
 
-  // @Column()
-  // imageUrl: string;
+  @Column()
+  imageName: string;
   
   @Column()
   price: number;
@@ -38,8 +39,9 @@ export class Product {
   
   @Column()
   categoryId: number;
-  
+
   @ManyToOne(() => Category, (category) => category.products, { eager: false, onDelete: 'CASCADE' })
   // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})
-  category: Category[];
+  @JoinColumn()
+  category: Category;
 }

@@ -1,5 +1,6 @@
 import { Product } from 'src/products/entity/product.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+// import { SubCategory } from 'src/subcategories/entity/subcategory.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Category {
@@ -9,6 +10,10 @@ export class Category {
   @Column()
   label: string;
 
-  @OneToMany(type => Product, (product) => product.category)
+  @OneToOne(type => Product, (product) => product.category)
+  @JoinColumn()
   products: Product;
+
+  // @OneToOne(type => SubCategory, (subcategory) => subcategory.category)
+  // subcategory: SubCategory
 }

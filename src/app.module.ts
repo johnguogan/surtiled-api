@@ -7,12 +7,12 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categoies.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/entity/user.entity';
+import { User } from './users/entity/user.entity'
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
-    AuthModule,
-    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -24,6 +24,12 @@ import { User } from './users/entity/user.entity';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, 'uploads')
+    }),
+    AuthModule,
+    UsersModule,
+    
     CategoriesModule,
     ProductsModule,
   ],
