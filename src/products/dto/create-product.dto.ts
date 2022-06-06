@@ -9,8 +9,7 @@ export class CreateProductDto {
     readonly balance: number;
     readonly color: string;
     readonly featured: boolean;
-    categoryId: number;
-    // readonly review: number;
-    // readonly  reviewNumber: number;
+    readonly score: number;
+    readonly  reviewNumber: number;
     // readonly relatedKey: string[];
 }

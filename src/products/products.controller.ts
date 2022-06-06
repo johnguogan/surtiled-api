@@ -11,6 +11,8 @@ import { Body,
   UseInterceptors,
   UploadedFile } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UpdateResult } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -32,7 +34,20 @@ export class ProductsController {
   }
 
   @Post('/upload')
-  @UseInterceptors(FileInterceptor('photo', {dest: './uploads'}))
+  @UseInterceptors(FileInterceptor(
+    'photo',
+    {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          // Generating a 32 random chars long string
+          const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')
+          //Calling the callback passing the random name generated with the original extension name
+          cb(null, `${randomName}${extname(file.originalname)}`)
+        }
+      })
+    }
+  ))
   uploadImage(@UploadedFile() file) {
     console.log('request: ',file);
     return {path: file.filename}  
@@ -50,9 +65,30 @@ export class ProductsController {
     return products;
   }
 
+  // findFeaturedAll(@Res() res) {
+  //   res.sendFile('948fc9e46db1bdbfd0e2b027e560fbdf', { root: './uploads'})
+  //   // const products = this.productsService.featuredAll();
+    
+  //   // return products;
+  // }
+
   @Get(':id')
-  findProduct(@Param('id') id: number): Promise<Product[]> {
+  findProducts(@Param('id') id: number): Promise<Product[]> {
+    console.log("param id: ", id);
+    
     const products = this.productsService.findGroup(id)
+    console.log("producst: ", products);
+    
+    return products
+  }
+
+  @Get('/item/:id')
+  getProduct(@Param('id') id: number): Promise<Product[]> {
+    console.log("param id: ", id);
+    
+    const products = this.productsService.findProduct(id)
+    console.log("producst: ", products);
+    
     return products
   }
 

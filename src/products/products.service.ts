@@ -37,7 +37,17 @@ export class ProductsService {
     // this.productRepository.createQueryBuilder('product')
     //   .innerJoin('product.categoryId', 'category')
     return this.productRepository.find({
-      where: { categoryId: id }
+      relations: ['category'],
+      where: { category: {categoryId: id} }
+    });
+  }
+
+  async findProduct(id: number): Promise<Product[]>{
+    // this.productRepository.createQueryBuilder('product')
+    //   .innerJoin('product.categoryId', 'category')
+    return this.productRepository.find({
+      // relations: ['review'],
+      where: { id }
     });
   }
 

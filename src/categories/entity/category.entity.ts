@@ -10,9 +10,12 @@ export class Category {
   @Column()
   label: string;
 
-  @OneToOne(type => Product, (product) => product.category)
+  @Column()
+  categoryId: number;
+
+  @OneToMany(type => Product, (product) => product.category)
   @JoinColumn()
-  products: Product;
+  products: Product[];
 
   // @OneToOne(type => SubCategory, (subcategory) => subcategory.category)
   // subcategory: SubCategory

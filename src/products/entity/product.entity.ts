@@ -31,15 +31,12 @@ export class Product {
   @Column()
   featured: boolean;
 
-  // @Column()
-  // review: number;
+  @Column({default: 0})
+  score: number;
 
-  // @Column()
-  // reviewNumber: number;
+  @Column({default: 0})
+  reviewNumber: number;
   
-  @Column()
-  categoryId: number;
-
   @ManyToOne(() => Category, (category) => category.products, { eager: false, onDelete: 'CASCADE' })
   // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})
   @JoinColumn()
