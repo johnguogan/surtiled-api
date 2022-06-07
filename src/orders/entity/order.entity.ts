@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Double } from 'typeorm';
 
 @Entity()
 export class Order {
@@ -6,7 +6,13 @@ export class Order {
   id: number;
 
   @Column()
+  orderNumber: number;
+
+  @Column()
   name: string;
+
+  @Column()
+  userId: number;
 
   @Column()
   idCard: string;
@@ -20,14 +26,26 @@ export class Order {
   @Column()
   address: string;
 
-  @Column()
+  @Column({type: 'float'})
   latitude: number;
-
-  @Column()
+  
+  @Column({type: 'float'})
   longitude: number;
 
   @Column()
   reference: string;
+
+  @Column({default: false})
+  received: boolean;
+  
+  @Column({default: false})
+  delivered: boolean;
+
+  @Column()
+  orderedAt: Date;
+  
+  @Column()
+  deliveredAt: Date;
   
   // @ManyToOne(() => Category, (category) => category.products, { eager: false, onDelete: 'CASCADE' })
   // // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})

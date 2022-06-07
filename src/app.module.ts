@@ -10,6 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entity/user.entity'
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -30,9 +31,9 @@ import { join } from 'path';
     }),
     AuthModule,
     UsersModule,
-    
     CategoriesModule,
     ProductsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

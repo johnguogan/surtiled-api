@@ -8,40 +8,43 @@ export class User {
   @Column()
   userid: string;
 
+  @Column({nullable: true})
+  imageName: string;
+
   @Column()
   names: string;
 
-  @Column()
-  surnames: string;
+  @Column({nullable: true})
+  surnames?: string;
   
-  @Column()
+  @Column({nullable: true})
   typeId: string;
   
-  @Column()
-  idNumber: number;
+  @Column({nullable: true})
+  idNumber?: number;
 
-  @Column()
+  @Column({nullable: true})
   cell: number;
 
-  @Column()
+  @Column({nullable: true})
   conventional: string;
 
-  @Column()
+  @Column({nullable: true})
   residence: string;
 
-  @Column()
+  @Column({nullable: true})
   email: string;
   
-  @Column()
+  @Column({nullable: true})
   password: string;
 
   @Column()
   role: string;
 
-  @Column({ default: null, type:"datetime"})
+  @Column({  type:"datetime"})
   created_at?:  Date;
 
-  @Column({ default: null, type:"datetime"})
+  @Column({  type:"datetime"})
   updated_at?:  Date;
 
   // @OneToMany(() => Book, book => book.user)

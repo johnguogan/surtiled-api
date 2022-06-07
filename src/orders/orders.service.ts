@@ -13,15 +13,12 @@ export class OrdersService {
   ) {}
 
   async create (createOrderDto: CreateOrderDto) {
-    // const createdOrder = new this.orderRepository(createOrderDto);
-    // return createdOrder.save();
-    // return await this.orderRepository.save(createOrderDto)
-    //   .then(res => res).catch(e => console.log(e));
+    return this.orderRepository.save(createOrderDto)
   }
 
   async findOne(id: number): Promise<Order | undefined> {
     // this.orderRepository.find().exec();
-    return this.orderRepository.findOne({where: {id}});
+    return await this.orderRepository.findOne({where: {id}});
   }
 
   async findAll(): Promise<Order[]>{
@@ -30,5 +27,10 @@ export class OrdersService {
 
   async update(id:number, data:any) {
     return await this.orderRepository.update({id}, data)
+  }
+
+  async generateOrderNumber(id: number) {
+    const orderCount =  await this.orderRepository.count({where: {userId: id}})
+    return (new Date()).getFullYear() % 100 * 1000 + orderCount + 1 + id * 100000
   }
 }
