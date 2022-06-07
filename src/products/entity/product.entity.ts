@@ -1,6 +1,6 @@
 import { Category } from 'src/categories/entity/category.entity';
-import internal from 'stream';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
+import { OrderList } from 'src/orders/entity/orderlist.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Product {
@@ -41,4 +41,7 @@ export class Product {
   // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})
   @JoinColumn()
   category: Category;
+
+  @OneToMany(() => OrderList, (orderList) => orderList.product)
+  orderList: OrderList[];
 }

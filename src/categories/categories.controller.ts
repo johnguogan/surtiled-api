@@ -18,7 +18,7 @@ export class CategoriesController {
   
   @Get()
   findAll(): Promise<Category[]> {
-    const categories = this.categoriesService.findAll();
+    const categories = this.categoriesService.findCategories();
     return categories;
   }
 }

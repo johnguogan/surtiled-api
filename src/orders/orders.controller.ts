@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Req, UseGuards, Header, Param } from '@nes
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entity/order.entity';
+import { OrderList } from './entity/orderlist.entity';
 import { OrdersService } from './orders.service';
 
 @Controller('orders')
@@ -11,6 +12,12 @@ export class OrdersController {
   @Get('/')
   findAll(): Promise<Order[]> {
     const orders = this.ordersService.findAll();
+    return orders;
+  }
+
+  @Get(':id')
+  getOrder(@Param('id') id: number): Promise<OrderList[]> {
+    const orders = this.ordersService.findOne(id);
     return orders;
   }
   
@@ -24,8 +31,7 @@ export class OrdersController {
   @UseGuards(JwtAuthGuard)
   create(@Body() createOrderDto: CreateOrderDto) {
     console.log("order add request: ", createOrderDto);
-    
-    const order = this.ordersService.create(createOrderDto)
-    return order;
+    this.ordersService.create(createOrderDto)
+    return true;
   }
 }

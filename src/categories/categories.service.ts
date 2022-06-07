@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThan, MoreThan, Repository } from 'typeorm';
 import { Category } from './entity/category.entity';
 // import { Model } from 'mongoose';
 // import { InjectModel } from '@nestjs/mongoose';
@@ -20,14 +20,13 @@ export class CategoriesService {
     return await this.categoriesRepository.save(createCategoryDto).then(res => res).catch(e => console.log(e));
   }
 
-  // async findOne(id: number): Promise<Category | undefined> {
-  //   // this.categoriesRepository.find().exec();
-  //   // return this.categoriesRepository.find(order => order.name === name);
-  //   return;
-  // }
+  async findOne(id: number): Promise<Category | undefined> {
+    // this.categoriesRepository.find().exec();
+    return await this.categoriesRepository.findOne({where: {id}});
+  }
 
-  async findAll(): Promise<Category[]>{
-    return this.categoriesRepository.find();
+  async findCategories(): Promise<Category[]>{
+    return this.categoriesRepository.find({where: {categoryId: LessThan(10)}});
   }
   
   async remove(id: number): Promise<void> {

@@ -1,3 +1,5 @@
+import { CreateOrderItemDto } from "./create-orderitem.dto";
+
 export class CreateOrderDto {
     readonly names: string;
     readonly orderNumber: number;
@@ -9,4 +11,5 @@ export class CreateOrderDto {
     readonly latitude: number;
     readonly longitude: number;
     readonly reference: string;
+    readonly products: CreateOrderItemDto[];
 }

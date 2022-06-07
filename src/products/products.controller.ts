@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CategoriesService } from 'src/categories/categories.service';
 import { UpdateResult } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entity/product.entity';
@@ -21,14 +22,19 @@ import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private productsService: ProductsService) {}
+  constructor(
+    private productsService: ProductsService,
+    private categoriesService: CategoriesService
+  ) {}
 
   @Post('/add')
   // @Header('content-type', 'multipart/form-data')
   @UseGuards(JwtAuthGuard)
   create(@Body() createProductDto: CreateProductDto) {
     // createProductDto.categoryId = parseInt(createProductDto.categoryId.toString())
+    const categoy = this.categoriesService.findOne(6)
     console.log("product add: ", createProductDto);
+    createProductDto['categoryId'] = categoy;
     const product = this.productsService.create(createProductDto)
     return product;
   }
@@ -74,21 +80,13 @@ export class ProductsController {
 
   @Get(':id')
   findProducts(@Param('id') id: number): Promise<Product[]> {
-    console.log("param id: ", id);
-    
     const products = this.productsService.findGroup(id)
-    console.log("producst: ", products);
-    
     return products
   }
 
   @Get('/item/:id')
   getProduct(@Param('id') id: number): Promise<Product[]> {
-    console.log("param id: ", id);
-    
     const products = this.productsService.findProduct(id)
-    console.log("producst: ", products);
-    
     return products
   }
 
