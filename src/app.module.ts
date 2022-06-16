@@ -11,6 +11,8 @@ import { User } from './users/entity/user.entity'
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { OrdersModule } from './orders/orders.module';
+import { AppGateway } from './app.gateway';
+import { ChattingModule } from './chatting/chatting.module';
 
 @Module({
   imports: [
@@ -34,9 +36,10 @@ import { OrdersModule } from './orders/orders.module';
     CategoriesModule,
     ProductsModule,
     OrdersModule,
+    ChattingModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppGateway],
 })
 
 export class AppModule {}
