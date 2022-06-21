@@ -21,7 +21,7 @@ import { ChattingModule } from './chatting/chatting.module';
       host: 'priva230.spindns.com',
       port: 3306,
       username: 'nousproyec1_surtiled',
-      password: 'XWU*-~7~H[]$',
+      password: 'k~un_+dm[mV_',
       database: 'nousproyec1_surtiled',
       // entities: [User],
       autoLoadEntities: true,
