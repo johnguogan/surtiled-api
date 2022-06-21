@@ -3,6 +3,7 @@ import internal from "stream";
 export class CreateProductDto {
     readonly name: string;
     readonly code: number;
+    category: number;
     // readonly characteristic: string;
     readonly imageName: string;
     readonly price: number;

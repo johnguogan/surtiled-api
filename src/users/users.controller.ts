@@ -18,6 +18,13 @@ export class UsersController {
     return user;
   }
 
+  @Get('userinfo')
+  async getUser(@Body() data: any) {
+    const result = await this.usersService.findOne(data.userid)
+    const {password, ...info} = result
+    return info
+  }
+
   @Get('list')
   // @UseGuards(JwtAuthGuard)
   findAll(): Promise<User[]> {
@@ -27,7 +34,6 @@ export class UsersController {
         return response
       });
     return users;
-    
   }
 
   @Post('add')

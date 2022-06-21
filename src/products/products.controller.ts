@@ -32,9 +32,11 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   create(@Body() createProductDto: CreateProductDto) {
     // createProductDto.categoryId = parseInt(createProductDto.categoryId.toString())
-    const categoy = this.categoriesService.findOne(6)
+    const category = this.categoriesService.findOne(createProductDto.category)
     console.log("product add: ", createProductDto);
-    createProductDto['categoryId'] = categoy;
+
+    const productInfo = createProductDto;
+    productInfo['categoryId'] = category;
     const product = this.productsService.create(createProductDto)
     return product;
   }
@@ -79,7 +81,7 @@ export class ProductsController {
   // }
 
   @Get(':id')
-  findProducts(@Param('id') id: number): Promise<Product[]> {
+  findProducts(@Param('id') id: number): Promise<any> {
     const products = this.productsService.findGroup(id)
     return products
   }

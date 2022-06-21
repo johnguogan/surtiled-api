@@ -6,16 +6,19 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entity/product.entity';
 import { Repository } from 'typeorm';
+import { Category } from 'src/categories/entity/category.entity';
 
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private productRepository: Repository<Product>
+    private productRepository: Repository<Product>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>
   ) {}
 
-  async create (createProductDto: CreateProductDto) {
+  async create (createProductDto: any) {
     return await this.productRepository.save(createProductDto)
       .then(res => res).catch(e => console.log(e));
   }
@@ -33,18 +36,20 @@ export class ProductsService {
     });
   }
 
-  async findGroup(id: number): Promise<Product[]>{
-    // this.productRepository.createQueryBuilder('product')
-    //   .innerJoin('product.categoryId', 'category')
-    return this.productRepository.find({
-      relations: ['category'],
-      where: { category: {categoryId: id} }
-    });
+  async findGroup(id: number): Promise<any>{
+    // return this.productRepository.find({
+    //   relations: ['category'],
+    //   where: { category: {categoryId: id} }
+    // });
+    const result = this.categoryRepository.findOne({
+      relations: ['products'],
+      where: {id}
+    })
+  
+    return result
   }
 
-  async findProduct(id: number): Promise<Product[]>{
-    // this.productRepository.createQueryBuilder('product')
-    //   .innerJoin('product.categoryId', 'category')
+  async findProduct(id: number): Promise<any>{
     return this.productRepository.find({
       // relations: ['review'],
       where: { id }

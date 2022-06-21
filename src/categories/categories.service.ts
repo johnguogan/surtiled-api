@@ -26,7 +26,10 @@ export class CategoriesService {
   }
 
   async findCategories(): Promise<Category[]>{
-    return this.categoriesRepository.find({where: {categoryId: LessThan(10)}});
+    return this.categoriesRepository.find();
+    // return this.categoriesRepository.find({
+    //   relations: ['products'],
+    // });
   }
   
   async remove(id: number): Promise<void> {
