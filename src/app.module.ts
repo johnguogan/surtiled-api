@@ -18,11 +18,11 @@ import { ChattingModule } from './chatting/chatting.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'priva230.spindns.com',
       port: 3306,
-      username: 'root',
-      password: '',
-      database: 'surtiled_db',
+      username: 'nousproyec1_surtiled',
+      password: 'XWU*-~7~H[]$',
+      database: 'nousproyec1_surtiled',
       // entities: [User],
       autoLoadEntities: true,
       synchronize: true,
