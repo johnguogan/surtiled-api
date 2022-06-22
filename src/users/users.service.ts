@@ -12,7 +12,12 @@ export class UsersService {
   ) {}
 
   async create (createUserDto: CreateUserDto) {
-    return await this.usersRepository.save(createUserDto)
+    const data = {
+      ...createUserDto,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+    return await this.usersRepository.save(data)
       // .then(res => res).catch(e => console.log(e));
   }
 
