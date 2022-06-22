@@ -22,6 +22,7 @@ import { ChattingModule } from './chatting/chatting.module';
       port: 3306,
       username: 'root',
       password: 'insert_password',
+      // password: '',
       database: 'surtiled_db',
       // entities: [User],
       autoLoadEntities: true,

@@ -41,10 +41,10 @@ export class User {
   @Column()
   role: string;
 
-  @Column({  type:"datetime"})
+  @Column({  type:"datetime", nullable: true})
   created_at?:  Date;
 
-  @Column({  type:"datetime"})
+  @Column({  type:"datetime", nullable: true})
   updated_at?:  Date;
 
   // @OneToMany(() => Book, book => book.user)
