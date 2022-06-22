@@ -21,10 +21,10 @@ export class User {
   typeId: string;
   
   @Column({nullable: true})
-  idNumber?: number;
+  idNumber?: string;
 
   @Column({nullable: true})
-  cell: number;
+  cell: string;
 
   @Column({nullable: true})
   conventional: string;

@@ -4,8 +4,8 @@ export class CreateUserDto {
     readonly names: string;
     readonly surnames?: string;
     readonly typeId?: string;
-    readonly idNumber?: number;
-    readonly cell?: number;
+    readonly idNumber?: string;
+    readonly cell?: string;
     readonly conventional?: string;
     readonly residence?: string;
     readonly email?: string;
