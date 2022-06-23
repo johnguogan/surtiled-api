@@ -67,13 +67,13 @@ export class ProductsController {
     return products;
   }
   
-  @Get('/featured/products')
+  @Get('/featured/product')
   findFeaturedProducts(): Promise<Product[]> {
     const products = this.productsService.featuredAll('product');
     return products;
   }
 
-  @Get('/featured/services')
+  @Get('/featured/service')
   findFeaturedServices(): Promise<Product[]> {
     const products = this.productsService.featuredAll('service');
     return products;
