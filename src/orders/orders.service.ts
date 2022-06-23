@@ -49,10 +49,17 @@ export class OrdersService {
     return order_list
   }
 
-  async findAll(): Promise<Order[]> {
+  async findOrderProducts(): Promise<Order[]> {
     return this.orderRepository.find({
       // relations: ['orderList'],
-      where: { delivered: false}
+      where: { delivered: false, type: 'product'}
+    })
+  }
+
+  async findOrderServices(): Promise<Order[]> {
+    return this.orderRepository.find({
+      // relations: ['orderList'],
+      where: { delivered: false, type: 'service'}
     })
   }
 

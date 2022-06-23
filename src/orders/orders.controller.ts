@@ -9,9 +9,15 @@ import { OrdersService } from './orders.service';
 export class OrdersController {
   constructor(private ordersService: OrdersService) {}
 
-  @Get('/')
-  findAll(): Promise<Order[]> {
-    const orders = this.ordersService.findAll();
+  @Get('/product')
+  findOrderProducts(): Promise<Order[]> {
+    const orders = this.ordersService.findOrderProducts();
+    return orders;
+  }
+
+  @Get('/service')
+  findOrderServices(): Promise<Order[]> {
+    const orders = this.ordersService.findOrderServices();
     return orders;
   }
 
