@@ -67,9 +67,15 @@ export class ProductsController {
     return products;
   }
   
-  @Get('/featured')
-  findFeaturedAll(): Promise<Product[]> {
-    const products = this.productsService.featuredAll();
+  @Get('/featured/products')
+  findFeaturedProducts(): Promise<Product[]> {
+    const products = this.productsService.featuredAll('product');
+    return products;
+  }
+
+  @Get('/featured/services')
+  findFeaturedServices(): Promise<Product[]> {
+    const products = this.productsService.featuredAll('service');
     return products;
   }
 

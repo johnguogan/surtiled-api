@@ -77,11 +77,11 @@ export class ProductsService {
     });
   }
 
-  async featuredAll(): Promise<Product[]>{
+  async featuredAll(type): Promise<Product[]>{
     // this.productRepository.createQueryBuilder('product')
     //   .innerJoin('product.categoryId', 'category')
     return this.productRepository.find({
-      where: { featured: true }
+      where: { featured: true, type }
     });
   }
 
