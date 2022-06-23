@@ -36,6 +36,9 @@ export class Order {
   @Column()
   reference: string;
 
+  @Column()
+  type: string;
+
   @Column({default: false})
   received: boolean;
   

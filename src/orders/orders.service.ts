@@ -16,34 +16,52 @@ export class OrdersService {
     private orderListRepository: Repository<OrderList>
   ) {}
 
-  async create (createOrderDto: CreateOrderDto) {
+  async create (createOrderDto: any) {
     const {products, ...order} = createOrderDto
     const insertedOrder = await this.orderRepository.save(order)
     console.log("insertedOrder: ", insertedOrder);
+    console.log("insertedOrder order: ", order);
     
     products.length > 0 && products.map(item => {
-      item['order'] = insertedOrder
-      item['product'] = item
+      item['order'] = insertedOrder.id
+      item['product'] = item.id
+      item['id'] = 0
       this.orderListRepository.save(item);
       return item;
     })
   }
 
-  async findOne(id: number): Promise<OrderList[] | undefined> {
-    const order = await this.orderListRepository.find({where: {id}});
-    return await this.orderListRepository.find({
-      relations: ['product'],
-      where: {order: order}
+  async findOne(id: number): Promise<any | undefined> {
+    const result = await this.orderListRepository.find({
+      relations: ['product', 'order'],
+      where: {order: {id}}
     });
+
+    const order_list = []
+    result.map(item => {
+      let order = {
+        quantity: item.quantity,
+        product: item.product
+      }
+        order_list.push(order)
+    })
+    
+    return order_list
   }
 
   async findAll(): Promise<Order[]> {
     return this.orderRepository.find({
-      relations: ['orderList'],
+      // relations: ['orderList'],
+      where: { delivered: false}
     })
   }
 
   async update(id:number, data:any) {
+    return await this.orderRepository.update({id}, data)
+  }
+
+  async deliveryAction(id:number) {
+    const data = { delivered: true }
     return await this.orderRepository.update({id}, data)
   }
 

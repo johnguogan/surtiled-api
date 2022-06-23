@@ -73,16 +73,15 @@ export class ProductsController {
     return products;
   }
 
-  // findFeaturedAll(@Res() res) {
-  //   res.sendFile('948fc9e46db1bdbfd0e2b027e560fbdf', { root: './uploads'})
-  //   // const products = this.productsService.featuredAll();
-    
-  //   // return products;
-  // }
-
   @Get(':id')
   findProducts(@Param('id') id: number): Promise<any> {
-    const products = this.productsService.findGroup(id)
+    const products = this.productsService.findProducts(id)
+    return products
+  }
+
+  @Get('services/:id')
+  findServices(@Param('id') id: number): Promise<any> {
+    const products = this.productsService.findServices(id)
     return products
   }
 

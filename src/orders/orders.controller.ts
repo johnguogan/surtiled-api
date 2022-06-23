@@ -34,4 +34,9 @@ export class OrdersController {
     this.ordersService.create(createOrderDto)
     return true;
   }
+
+  @Post('delivery/:id')
+  deliveryAction(@Param('id') id: number) {
+    return this.ordersService.deliveryAction(id)
+  }
 }

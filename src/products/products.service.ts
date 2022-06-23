@@ -36,7 +36,7 @@ export class ProductsService {
     });
   }
 
-  async findGroup(id: number): Promise<any>{
+  async findProducts(id: number): Promise<any>{
     // return this.productRepository.find({
     //   relations: ['category'],
     //   where: { category: {categoryId: id} }
@@ -45,7 +45,28 @@ export class ProductsService {
       relations: ['products'],
       where: {id}
     })
-  
+    .then((res) => {
+      res.products = res.products.filter(item => item.type === 'product')
+      return res
+    })
+    .catch(err => {
+      console.log("findServices Error!");
+    })
+    return result
+  }
+
+  async findServices(id: number): Promise<any>{
+    const result = this.categoryRepository.findOne({
+      relations: ['products'],
+      where: {id}
+    })
+    .then((res) => {
+      res.products = res.products.filter(item => item.type === 'service')
+      return res
+    })
+    .catch(err => {
+      console.log("findServices Error!");
+    })
     return result
   }
 

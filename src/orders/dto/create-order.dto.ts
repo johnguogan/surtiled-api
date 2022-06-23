@@ -11,5 +11,6 @@ export class CreateOrderDto {
     readonly latitude: number;
     readonly longitude: number;
     readonly reference: string;
+    readonly type: string;
     readonly products: CreateOrderItemDto[];
 }

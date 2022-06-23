@@ -31,6 +31,9 @@ export class Product {
   @Column()
   featured: boolean;
 
+  @Column()
+  type: string;
+
   @Column({default: 0})
   score: number;
 

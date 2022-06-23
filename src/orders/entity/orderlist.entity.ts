@@ -7,6 +7,10 @@ export class OrderList {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ManyToOne(() => Order, (order) =>order.orderList , { eager: false, onDelete: 'CASCADE' })
+  // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})
+  order: Order;
+  
   @ManyToOne(() => Product, (product) => product.orderList)
   product: Product;
   // @Column()
@@ -15,7 +19,4 @@ export class OrderList {
   @Column()
   quantity: number;
   
-  @ManyToOne(() => Order, (order) =>order.orderList , { eager: false, onDelete: 'CASCADE' })
-  // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})
-  order: Order;
 }

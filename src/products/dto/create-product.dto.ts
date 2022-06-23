@@ -10,6 +10,7 @@ export class CreateProductDto {
     readonly balance: number;
     readonly color: string;
     readonly featured: boolean;
+    readonly type: string;
     readonly score: number;
     readonly  reviewNumber: number;
     // readonly relatedKey: string[];
