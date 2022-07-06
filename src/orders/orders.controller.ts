@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards, Header, Param } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CreateBankAccountDto } from './dto/create-bankaccount.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entity/order.entity';
 import { OrderList } from './entity/orderlist.entity';
@@ -44,5 +45,22 @@ export class OrdersController {
   @Post('delivery/:id')
   deliveryAction(@Param('id') id: number) {
     return this.ordersService.deliveryAction(id)
+  }
+
+  @Post('bank/add')
+  registerBankAccount(@Body() data: CreateBankAccountDto) {
+    return this.ordersService.registerBankAccount(data)
+  }
+
+  @Get('bank/get')
+  getBankAccount()/*: Promise<CreateBankAccountDto> */{
+    return this.ordersService.getBankAccount()
+      .then(result => {
+        console.log("result: ", result);
+        console.log("result[0]", result[0]);
+        
+        return result[0]
+      })
+      .catch(err => err)
   }
 }

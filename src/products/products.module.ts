@@ -6,11 +6,13 @@ import { Product } from './entity/product.entity';
 import { CategoriesService } from 'src/categories/categories.service';
 import { CategoriesModule } from 'src/categories/categoies.module';
 import { Category } from 'src/categories/entity/category.entity';
+import { FavoritesModule } from 'src/favorites/favorites.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product, Category]),
-    CategoriesModule
+    CategoriesModule,
+    FavoritesModule
   ],
   controllers: [ProductsController],
   providers: [ProductsService],

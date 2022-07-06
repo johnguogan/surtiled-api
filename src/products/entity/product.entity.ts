@@ -39,12 +39,15 @@ export class Product {
 
   @Column({default: 0})
   reviewNumber: number;
+
+  @Column({default: true})
+  active: boolean;
   
-  @ManyToOne(() => Category, (category) => category.products, { eager: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => Category, (category) => category.products, { onDelete: 'CASCADE' })
   // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})
   @JoinColumn()
   category: Category;
 
-  @OneToMany(() => OrderList, (orderList) => orderList.product)
+  @OneToMany(() => OrderList, (orderList) => orderList.product, { onDelete: 'CASCADE' })
   orderList: OrderList[];
 }

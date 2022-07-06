@@ -5,6 +5,8 @@ import { DataSource, Repository } from 'typeorm';
 import { Order } from './entity/order.entity';
 import { OrderList } from './entity/orderlist.entity';
 import Connection from 'mysql2/typings/mysql/lib/Connection';
+import { BankAccount } from './entity/bankaccount.entity';
+import { CreateBankAccountDto } from './dto/create-bankaccount.dto';
 
 
 @Injectable()
@@ -13,7 +15,9 @@ export class OrdersService {
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
     @InjectRepository(OrderList)
-    private orderListRepository: Repository<OrderList>
+    private orderListRepository: Repository<OrderList>,
+    @InjectRepository(BankAccount)
+    private bankAccountRepository: Repository<BankAccount>
   ) {}
 
   async create (createOrderDto: any) {
@@ -77,5 +81,16 @@ export class OrdersService {
     console.log("generateOrderNumber: ", id, orderCount);
     
     return (new Date()).getFullYear() % 100 * 1000 + orderCount + 1 + id * 100000
+  }
+
+  async registerBankAccount(createBankAccountDto: CreateBankAccountDto) {
+    return await this.bankAccountRepository.save(createBankAccountDto)
+  }
+
+  async getBankAccount(): Promise<CreateBankAccountDto[]> {
+    const result = await this.bankAccountRepository.find();
+    console.log("service: ", result);
+    
+    return result
   }
 }

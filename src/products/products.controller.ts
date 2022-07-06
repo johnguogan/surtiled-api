@@ -9,7 +9,8 @@ import { Body,
   Res,
   Put,
   UseInterceptors,
-  UploadedFile } from '@nestjs/common';
+  UploadedFile, 
+  Req} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -27,18 +28,16 @@ export class ProductsController {
     private categoriesService: CategoriesService
   ) {}
 
-  @Post('/add')
-  // @Header('content-type', 'multipart/form-data')
-  @UseGuards(JwtAuthGuard)
-  create(@Body() createProductDto: CreateProductDto) {
-    // createProductDto.categoryId = parseInt(createProductDto.categoryId.toString())
-    const category = this.categoriesService.findOne(createProductDto.category)
-    console.log("product add: ", createProductDto);
+  @Get('/featured/product')
+  findFeaturedProducts(): Promise<Product[]> {
+    const products = this.productsService.featuredAll('product');
+    return products;
+  }
 
-    const productInfo = createProductDto;
-    productInfo['categoryId'] = category;
-    const product = this.productsService.create(createProductDto)
-    return product;
+  @Get('/featured/service')
+  findFeaturedServices(): Promise<Product[]> {
+    const products = this.productsService.featuredAll('service');
+    return products;
   }
 
   @Post('/upload')
@@ -60,40 +59,30 @@ export class ProductsController {
     console.log('request: ',file);
     return {path: file.filename}  
   }
-  
+
+  @Post('/add')
+  // @Header('content-type', 'multipart/form-data')
+  @UseGuards(JwtAuthGuard)
+  create(@Body() createProductDto: CreateProductDto) {
+    // createProductDto.categoryId = parseInt(createProductDto.categoryId.toString())
+    const category = this.categoriesService.findOne(createProductDto.category)
+    console.log("product add: ", createProductDto);
+
+    const productInfo = createProductDto;
+    productInfo['categoryId'] = category;
+    const product = this.productsService.create(createProductDto)
+    return product;
+  }
+
   @Get('/')
   findAll(): Promise<Product[]> {
     const products = this.productsService.findAll();
     return products;
   }
   
-  @Get('/featured/product')
-  findFeaturedProducts(): Promise<Product[]> {
-    const products = this.productsService.featuredAll('product');
-    return products;
-  }
-
-  @Get('/featured/service')
-  findFeaturedServices(): Promise<Product[]> {
-    const products = this.productsService.featuredAll('service');
-    return products;
-  }
-
   @Get(':id')
   findProducts(@Param('id') id: number): Promise<any> {
     const products = this.productsService.findProducts(id)
-    return products
-  }
-
-  @Get('services/:id')
-  findServices(@Param('id') id: number): Promise<any> {
-    const products = this.productsService.findServices(id)
-    return products
-  }
-
-  @Get('/item/:id')
-  getProduct(@Param('id') id: number): Promise<Product[]> {
-    const products = this.productsService.findProduct(id)
     return products
   }
 
@@ -104,9 +93,24 @@ export class ProductsController {
   }
   
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   delete(@Param('id') id: number) {
     this.productsService.remove(id)
     return {message: 'ok'}
+  }
+
+  @Get('services/:id')
+  findServices(@Param('id') id: number): Promise<any> {
+    const products = this.productsService.findServices(id)
+    return products
+  }
+
+  @Get('/item/:id')
+  @Header('content-type', 'application/x-www-form-urlencoded')
+  getProduct(@Param('id') id: number, @Req() request): Promise<Product> {
+    console.log("param: ", id);
+    console.log("body: ", request.query);
+    const product = this.productsService.findProduct(id, request.query.userid)
+    return product
   }
 }

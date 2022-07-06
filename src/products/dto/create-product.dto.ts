@@ -1,5 +1,3 @@
-import internal from "stream";
-
 export class CreateProductDto {
     readonly name: string;
     readonly code: number;

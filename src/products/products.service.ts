@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entity/product.entity';
 import { Repository } from 'typeorm';
 import { Category } from 'src/categories/entity/category.entity';
-
+import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class ProductsService {
@@ -15,12 +15,13 @@ export class ProductsService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
     @InjectRepository(Category)
-    private categoryRepository: Repository<Category>
+    private categoryRepository: Repository<Category>,
+    private favoriteService: FavoritesService
   ) {}
 
   async create (createProductDto: any) {
     return await this.productRepository.save(createProductDto)
-      .then(res => res).catch(e => console.log(e));
+      // .then(res => res).catch(e => console.log(e));
   }
 
   async findOne(id: number): Promise<Product | undefined> {
@@ -43,7 +44,7 @@ export class ProductsService {
     // });
     const result = this.categoryRepository.findOne({
       relations: ['products'],
-      where: {id}
+      where: {id},
     })
     .then((res) => {
       res.products = res.products.filter(item => item.type === 'product')
@@ -70,11 +71,14 @@ export class ProductsService {
     return result
   }
 
-  async findProduct(id: number): Promise<any>{
-    return this.productRepository.find({
+  async findProduct(id: number, userid: number): Promise<any>{
+    const product = await this.productRepository.findOne({
       // relations: ['review'],
       where: { id }
     });
+    product['favorite'] = await this.favoriteService.getFavorite({productid: id, userid})
+
+    return product
   }
 
   async featuredAll(type): Promise<Product[]>{
@@ -89,7 +93,7 @@ export class ProductsService {
     return await this.productRepository.update({id}, data)
   }
 
-  async remove(id: number) {
-    await this.productRepository.delete({id})
+  remove(id: number) {
+    return this.productRepository.delete({id})
   }
 }

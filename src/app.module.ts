@@ -13,15 +13,20 @@ import { join } from 'path';
 import { OrdersModule } from './orders/orders.module';
 import { AppGateway } from './app.gateway';
 import { ChattingModule } from './chatting/chatting.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      // host: 'priva230.spindns.com',
       port: 3306,
+      // username: 'nousproyec1_surtiled',
+      // password: 'XWU*-~7~H[]$',
+      // database: 'nousproyec1_surtiled',
+      host: 'localhost',
       username: 'root',
-      password: 'insert_password',
+      password: 'surtiled',
       // password: '',
       database: 'surtiled_db',
       // entities: [User],
@@ -38,6 +43,7 @@ import { ChattingModule } from './chatting/chatting.module';
     ProductsModule,
     OrdersModule,
     ChattingModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

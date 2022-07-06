@@ -18,8 +18,8 @@ export class Order {
   @Column()
   idCard: string;
   
-  @Column()
-  email: string;
+  // @Column()
+  // email: string;
   
   @Column()
   homeDelivery: boolean;
