@@ -37,6 +37,12 @@ export class Order {
   reference: string;
 
   @Column()
+  payment: string;
+
+  @Column()
+  receipt: string;
+
+  @Column()
   type: string;
 
   @Column({default: false})
