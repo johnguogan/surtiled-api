@@ -84,7 +84,7 @@ export class ProductsController {
   filteredProducts(@Body() filterList: any): Promise<any> {
     console.log("products/filter", filterList);
     
-    return this.productsService.filterProductProducts(filterList)
+    return this.productsService.filterProducts(filterList)
   }
 
   @Get(':id')
@@ -104,6 +104,13 @@ export class ProductsController {
   delete(@Param('id') id: number) {
     this.productsService.remove(id)
     return {message: 'ok'}
+  }
+
+  @Post('filter/services')
+  filteredServices(@Body() filterList: any): Promise<any> {
+    console.log("products/filter/services", filterList);
+    
+    return this.productsService.filterServices(filterList)
   }
 
   @Get('services/:id')

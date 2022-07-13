@@ -57,7 +57,7 @@ export class ProductsService {
     return result
   }
 
-  async filterProductProducts(filtterList: any) {
+  async filterProducts(filtterList: any) {
     const { category, lookfor, max, min} = filtterList
     let productList: any = [];
     let result: any = []
@@ -66,35 +66,35 @@ export class ProductsService {
       case 'popular':
         productList = await this.productRepository.find({
           relations: ['category'],
-          where: {category: {id: category}},
+          where: {category: {id: category, type: 'product'}},
           order: {'score': 'DESC'}
         })
         break;
       case 'new':
         productList = await this.productRepository.find({
           relations: ['category'],
-          where: {category: {id: category}},
+          where: {category: {id: category, type: 'product'}},
           order: {'createdAt': 'DESC'}
         })
         break;
       case 'old':
         productList = await this.productRepository.find({
           relations: ['category'],
-          where: {category: {id: category}},
+          where: {category: {id: category, type: 'product'}},
           order: {'createdAt': 'ASC'}
         })
         break;
       case 'higher':
         productList = await this.productRepository.find({
           relations: ['category'],
-          where: {category: {id: category}},
+          where: {category: {id: category, type: 'product'}},
           order: {'price': 'DESC'}
         })
         break;
       case 'lower':
         productList = await this.productRepository.find({
           relations: ['category'],
-          where: {category: {id: category}},
+          where: {category: {id: category, type: 'product'}},
           order: {'price': 'ASC'}
         })
         break;
@@ -103,6 +103,61 @@ export class ProductsService {
     }
 
     result = productList
+    if(min > 0)
+      result = productList.filter((item: any) => item.price > min)
+    if(max > 0)
+      result = result.filter((item: any) => item.price < max)
+    
+    return result
+  }
+
+  async filterServices(filtterList: any) {
+    const { category, lookfor, max, min} = filtterList
+    let productList: any = [];
+    let result: any = []
+
+    switch(lookfor) {
+      case 'popular':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}, type: 'service'},
+          order: {'score': 'DESC'}
+        })
+        break;
+      case 'new':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}, type: 'service'},
+          order: {'createdAt': 'DESC'}
+        })
+        break;
+      case 'old':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}, type: 'service'},
+          order: {'createdAt': 'ASC'}
+        })
+        break;
+      case 'higher':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}, type: 'service'},
+          order: {'price': 'DESC'}
+        })
+        break;
+      case 'lower':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}, type: 'service'},
+          order: {'price': 'ASC'}
+        })
+        break;
+      default:
+        break;
+    }
+
+    result = productList
+    console.log("product list: ", result)
     if(min > 0)
       result = productList.filter((item: any) => item.price > min)
     if(max > 0)

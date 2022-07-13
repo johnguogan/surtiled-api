@@ -71,6 +71,6 @@ export class UsersService {
     let result: any;
     if(user)
       result = await this.usersRepository.update(user.id, { socketId: ''})
-    return result
+    return user
   }
 }

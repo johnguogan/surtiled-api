@@ -20,12 +20,14 @@ export class OrdersService {
     private orderListRepository: Repository<OrderList>,
     @InjectRepository(BankAccount)
     private bankAccountRepository: Repository<BankAccount>,
+    private usersService: UsersService,
   ) {}
 
   async create (createOrderDto: any) {
     const {products, ...order} = createOrderDto
+    const user = await this.usersService.findOneById(order.userId)
+    order['user'] = user
     const insertedOrder = await this.orderRepository.save(order)
-    console.log("insertedOrder: ", insertedOrder);
     console.log("insertedOrder order: ", order);
     
     products.length > 0 && products.map(item => {

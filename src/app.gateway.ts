@@ -30,7 +30,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     console.log("updated User: ", user)
     
     // this.server.emit('message', payload);
-    this.server.to(client.id).emit('user', {state: true})
+    this.server.to(client.id).emit('user', {state: true, socketId: client.id})
   }
 
   @SubscribeMessage('message')
@@ -47,12 +47,17 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
       
     room = await this.chattingService.getChannel(room.id)
     console.log("room data: ", room);
+    // console.log("socket data: ", client);
     
-    if(room.user1.socketId)
-      this.server.to(room.user1.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id})
-    if(room.user2.socketId)
-      this.server.to(room.user2.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id})
-    
+    if(room.user1.socketId) {
+      this.server.to(room.user1.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user1.socketId})
+      console.log("message user1 emit: ", {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user1.socketId});
+      
+    }
+    if(room.user2.socketId) {
+      this.server.to(room.user2.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user2.socketId})
+      console.log("message user2 emit: ", {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user2.socketId});
+    }
 
     // this.server.emit('message', payload);
     // this.server.to(client.id).emit('message', 'server to emit')

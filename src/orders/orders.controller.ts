@@ -44,7 +44,7 @@ export class OrdersController {
   
   @Post('add')
   @Header('content-type', 'application/x-www-form-urlencoded')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   create(@Body() createOrderDto: CreateOrderDto) {
     console.log("order add request: ", createOrderDto);
     this.ordersService.create(createOrderDto)
