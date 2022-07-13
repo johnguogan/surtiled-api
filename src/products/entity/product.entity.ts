@@ -42,6 +42,9 @@ export class Product {
 
   @Column({default: true})
   active: boolean;
+
+  @Column()
+  createdAt: Date;
   
   @ManyToOne(() => Category, (category) => category.products, { onDelete: 'CASCADE' })
   // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})

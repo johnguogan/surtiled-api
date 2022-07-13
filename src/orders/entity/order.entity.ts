@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, Double, OneToMany, JoinColumn } from 'typeorm';
+import { User } from 'src/users/entity/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, Double, OneToMany, JoinColumn, ManyToOne } from 'typeorm';
 import { OrderList } from './orderlist.entity';
 
 @Entity()
@@ -11,9 +12,6 @@ export class Order {
 
   @Column()
   name: string;
-
-  @Column()
-  userId: number;
 
   @Column()
   idCard: string;
@@ -61,4 +59,7 @@ export class Order {
   @JoinColumn()
   // @JoinColumn({name: 'categoryId', referencedColumnName: 'id'})
   orderList: OrderList[];
+
+  @ManyToOne(() => User, (user) => user.order)
+  user: User;
 }

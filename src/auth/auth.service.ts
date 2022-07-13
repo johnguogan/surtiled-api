@@ -34,6 +34,7 @@ export class AuthService {
 
   async register(user: CreateUserDto) {
     user.password = await bcrypt.hash(user.password, 10)
+    user['createdAt'] = new Date()
     let response = await this.usersService.create(user)
     if (response) {
       const { password, ...result } = response

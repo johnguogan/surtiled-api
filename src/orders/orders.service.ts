@@ -7,6 +7,8 @@ import { OrderList } from './entity/orderlist.entity';
 import Connection from 'mysql2/typings/mysql/lib/Connection';
 import { BankAccount } from './entity/bankaccount.entity';
 import { CreateBankAccountDto } from './dto/create-bankaccount.dto';
+import { User } from 'src/users/entity/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 
 @Injectable()
@@ -17,7 +19,7 @@ export class OrdersService {
     @InjectRepository(OrderList)
     private orderListRepository: Repository<OrderList>,
     @InjectRepository(BankAccount)
-    private bankAccountRepository: Repository<BankAccount>
+    private bankAccountRepository: Repository<BankAccount>,
   ) {}
 
   async create (createOrderDto: any) {
@@ -36,27 +38,47 @@ export class OrdersService {
   }
 
   async findOne(id: number): Promise<any | undefined> {
+    const order = await this.orderRepository.findOne({where: {id}})
+
     const result = await this.orderListRepository.find({
       relations: ['product', 'order'],
-      where: {order: {id}}
+      where: {order: {id}},
+      select:{
+        product: {
+          name: true,
+          price: true,
+          imageName: true,
+        },
+      }
     });
 
     const order_list = []
     result.map(item => {
-      let order = {
+      let orderItem = {
         quantity: item.quantity,
-        product: item.product
+        name: item.product.name,
+        imageName: item.product.imageName,
+        price: item.product.price
       }
-        order_list.push(order)
+
+      order_list.push(orderItem)
     })
     
-    return order_list
+    order['productList'] = order_list
+    return order
   }
 
   async findOrderProducts(): Promise<Order[]> {
     return this.orderRepository.find({
-      // relations: ['orderList'],
-      where: { delivered: false, type: 'product'}
+      relations: ['user','orderList'],
+      where: { delivered: false, type: 'product'},
+      select: {
+        id: true,
+        user: {
+          names: true,
+          surnames: true,
+        },
+      }
     })
   }
 
@@ -77,20 +99,30 @@ export class OrdersService {
   }
 
   async generateOrderNumber(id: number) {
-    const orderCount =  await this.orderRepository.count({where: {userId: id}})
-    console.log("generateOrderNumber: ", id, orderCount);
+    // const user = await this.userRepository.findOne({where: {id}})
+    // const user = await this.usersService.findOneById(id)
+    const orderCount =  await this.orderRepository.count({where: {user:{id}}})
+    // console.log("generateNumber user: ", user);
     
+    console.log("generateOrderNumber: ", id, orderCount);
     return (new Date()).getFullYear() % 100 * 1000 + orderCount + 1 + id * 100000
   }
 
   async registerBankAccount(createBankAccountDto: CreateBankAccountDto) {
-    return await this.bankAccountRepository.save(createBankAccountDto)
+    createBankAccountDto['id'] = 1
+    const list = await this.bankAccountRepository.find()
+    if(list.length > 0)
+      return await this.bankAccountRepository.update(1, createBankAccountDto)
+    else
+      return await this.bankAccountRepository.save(createBankAccountDto)
   }
 
   async getBankAccount(): Promise<CreateBankAccountDto[]> {
     const result = await this.bankAccountRepository.find();
-    console.log("service: ", result);
-    
     return result
   }
+
+  // async getOrderedNumber() {
+  //   const products = await this.orderRepository.find({where:{}})
+  // }
 }

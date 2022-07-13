@@ -16,6 +16,9 @@ export class Category {
   @Column()
   imgUrl: string;
 
+  @Column()
+  type: string;
+
   @OneToMany(type => Product, (product) => product.category)
   @JoinColumn()
   products: Product[];

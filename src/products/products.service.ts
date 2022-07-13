@@ -20,6 +20,7 @@ export class ProductsService {
   ) {}
 
   async create (createProductDto: any) {
+    createProductDto['createdAt'] = new Date()
     return await this.productRepository.save(createProductDto)
       // .then(res => res).catch(e => console.log(e));
   }
@@ -53,6 +54,60 @@ export class ProductsService {
     .catch(err => {
       console.log("findServices Error!");
     })
+    return result
+  }
+
+  async filterProductProducts(filtterList: any) {
+    const { category, lookfor, max, min} = filtterList
+    let productList: any = [];
+    let result: any = []
+
+    switch(lookfor) {
+      case 'popular':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}},
+          order: {'score': 'DESC'}
+        })
+        break;
+      case 'new':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}},
+          order: {'createdAt': 'DESC'}
+        })
+        break;
+      case 'old':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}},
+          order: {'createdAt': 'ASC'}
+        })
+        break;
+      case 'higher':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}},
+          order: {'price': 'DESC'}
+        })
+        break;
+      case 'lower':
+        productList = await this.productRepository.find({
+          relations: ['category'],
+          where: {category: {id: category}},
+          order: {'price': 'ASC'}
+        })
+        break;
+      default:
+        break;
+    }
+
+    result = productList
+    if(min > 0)
+      result = productList.filter((item: any) => item.price > min)
+    if(max > 0)
+      result = result.filter((item: any) => item.price < max)
+    
     return result
   }
 

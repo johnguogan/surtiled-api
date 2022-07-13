@@ -5,6 +5,23 @@ import { ChattingService } from './chatting.service';
 export class ChattingController {
   constructor(private chattingService: ChattingService) {}
 
+  @Get('users/:userId')
+  getChatUsers(@Param('userId') userId: number) {
+    console.log("getChatUsers: ", userId);
+    const users = this.chattingService.getUsers(userId)
+    return users
+  }
+
+  @Get('messages/:channelId')
+  getChatMessages(@Param('channelId') channelId: number) {
+    console.log("getChatMessages: ", channelId);
+    const messages = this.chattingService.getMessages(channelId)
+    return messages
+  }
+
+  /**
+   *  For Emilon Backend Test  -----------------------------------------------
+   */
   @Post('user/signin-request')
   loginRequest(@Body() data) {
     console.log("loginInfo: ", data);
@@ -146,11 +163,42 @@ export class ChattingController {
             { id: "user5-id", username: "username5", useravatar: "uesravatar5", nickname: "nickname5", role: "client"},
             { id: "user6-id", username: "username6", useravatar: "uesravatar6", nickname: "nickname6", role: "client"},
           ],
-          "messages": [
-            {}
-          ]
       }
     }
     return response;
+  }
+
+  @Get('chat/group/:id')
+  getChats(@Param('id') id: string) {
+    console.log("getChats: ", id);
+    const response = [
+      {
+        id: 'user1-id',
+        messageType: 'GM',
+        username: 'User Name1',
+        nickname: 'Nickname1',
+        body: 'Hey, This is a message sent by this person. It works like a message in any angular chat. Nothing very interesting to see here.',
+        time: new Date('2022-07-04')
+      },
+      {
+        id: 'user2-id',
+        messageType: 'GM',
+        username: 'User Name2',
+        nickname: 'Nickname2',
+        body: 'Hey, This is a message sent by this person. It works like a message in any angular chat. Nothing very interesting to see here.',
+        imageUrl: '/assets/children.jpg',
+        time: new Date('2022-07-05')
+      },
+      {
+        id: 'user3-id',
+        messageType: 'GM',
+        username: 'User Name3',
+        nickname: 'Nickname3',
+        body: 'Hey, This is a message sent by this person. It works like a message in any angular chat. Nothing very interesting to see here.',
+        time: new Date('2022-07-06')
+      },
+    ]
+
+    return response
   }
 }

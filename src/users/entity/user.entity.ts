@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Channel } from 'src/chatting/entity/channels.entity';
+import { Order } from 'src/orders/entity/order.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -15,7 +17,10 @@ export class User {
   names: string;
 
   @Column({nullable: true})
-  surnames?: string;
+  surnames: string;
+
+  @Column({nullable: true})
+  imageLink: string;
   
   @Column({nullable: true})
   typeId: string;
@@ -41,12 +46,21 @@ export class User {
   @Column()
   role: string;
 
+  @Column()
+  socketId: string;
+
   @Column({  type:"datetime", nullable: true})
   created_at?:  Date;
 
   @Column({  type:"datetime", nullable: true})
   updated_at?:  Date;
 
-  // @OneToMany(() => Book, book => book.user)
-  //   books?: Book[];
+  @OneToMany(() => Order, order => order.user)
+  order: Order[]
+
+  @OneToMany(() => Channel, channel => channel.user1)
+  user1: Channel[]
+
+  @OneToMany(() => Channel, channel => channel.user2)
+  user2: Channel[]
 }

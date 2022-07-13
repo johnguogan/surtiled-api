@@ -22,6 +22,15 @@ export class OrdersController {
     return orders;
   }
 
+  
+  @Get('ordered-number')
+  async getOrderedNumber() {
+    // return this.ordersService.getOrderedNumber()
+    const products = await (await this.ordersService.findOrderProducts()).length
+    const services = await (await this.ordersService.findOrderServices()).length
+    return { products, services }
+  }
+
   @Get(':id')
   getOrder(@Param('id') id: number): Promise<OrderList[]> {
     const orders = this.ordersService.findOne(id);
@@ -55,12 +64,7 @@ export class OrdersController {
   @Get('bank/get')
   getBankAccount()/*: Promise<CreateBankAccountDto> */{
     return this.ordersService.getBankAccount()
-      .then(result => {
-        console.log("result: ", result);
-        console.log("result[0]", result[0]);
-        
-        return result[0]
-      })
+      .then(result => result[0])
       .catch(err => err)
   }
 }

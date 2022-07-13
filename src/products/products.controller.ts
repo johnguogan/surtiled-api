@@ -80,6 +80,13 @@ export class ProductsController {
     return products;
   }
   
+  @Post('filter')
+  filteredProducts(@Body() filterList: any): Promise<any> {
+    console.log("products/filter", filterList);
+    
+    return this.productsService.filterProductProducts(filterList)
+  }
+
   @Get(':id')
   findProducts(@Param('id') id: number): Promise<any> {
     const products = this.productsService.findProducts(id)
@@ -101,6 +108,8 @@ export class ProductsController {
 
   @Get('services/:id')
   findServices(@Param('id') id: number): Promise<any> {
+    console.log("products/services/:id");
+    
     const products = this.productsService.findServices(id)
     return products
   }
