@@ -46,7 +46,7 @@ export class User {
   @Column()
   role: string;
 
-  @Column()
+  @Column({default: ''})
   socketId: string;
 
   @Column({  type:"datetime", nullable: true})
