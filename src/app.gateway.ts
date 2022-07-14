@@ -31,6 +31,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     
     // this.server.emit('message', payload);
     this.server.to(client.id).emit('user', {state: true, socketId: client.id})
+    this.server.disconnectSockets
   }
 
   @SubscribeMessage('message')
@@ -43,21 +44,16 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     else
       room = await this.chattingService.getChannel(channelId)
       
-    this.chattingService.createMessage({channel: room, message: content, senderId: id})
+    const newChat = await this.chattingService.createMessage({channel: room, message: content, senderId: id})
       
     room = await this.chattingService.getChannel(room.id)
     console.log("room data: ", room);
     // console.log("socket data: ", client);
     
-    if(room.user1.socketId) {
-      this.server.to(room.user1.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user1.socketId})
-      console.log("message user1 emit: ", {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user1.socketId});
-      
-    }
-    if(room.user2.socketId) {
-      this.server.to(room.user2.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user2.socketId})
-      console.log("message user2 emit: ", {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user2.socketId});
-    }
+    if(room.user1.socketId) 
+      this.server.to(room.user1.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user1.socketId, messageId: newChat.id})
+    if(room.user2.socketId) 
+      this.server.to(room.user2.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user2.socketId, messageId: newChat.id})
 
     // this.server.emit('message', payload);
     // this.server.to(client.id).emit('message', 'server to emit')

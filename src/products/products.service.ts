@@ -66,7 +66,7 @@ export class ProductsService {
       case 'popular':
         productList = await this.productRepository.find({
           relations: ['category'],
-          where: {category: {id: category, type: 'product'}},
+          where: {category: {id: category}, type: 'product'},
           order: {'score': 'DESC'}
         })
         break;
