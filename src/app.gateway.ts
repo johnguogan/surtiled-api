@@ -31,7 +31,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     
     // this.server.emit('message', payload);
     this.server.to(client.id).emit('user', {state: true, socketId: client.id})
-    this.server.disconnectSockets
+    // this.server.disconnectSockets
   }
 
   @SubscribeMessage('message')

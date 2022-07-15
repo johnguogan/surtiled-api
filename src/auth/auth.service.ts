@@ -25,7 +25,8 @@ export class AuthService {
     const userInfo = await this.usersService.findOne(user.userid);
     const payload = { username: user.names, sub: user.userId};
     const {password, ...result} = userInfo
-    
+    console.log("/login-result: ", userInfo);
+
     return {
       user: result,
       access_token: this.jwtService.sign(payload),
@@ -36,6 +37,7 @@ export class AuthService {
     user.password = await bcrypt.hash(user.password, 10)
     user['createdAt'] = new Date()
     let response = await this.usersService.create(user)
+    console.log("/register-result: ", response);
     if (response) {
       const { password, ...result } = response
       return result

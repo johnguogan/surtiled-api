@@ -10,11 +10,14 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
+    console.log("/login: ", req.body);
+    
     return this.authService.login(req.body)
   }
 
   @Post('register')
   async register(@Request() req) {
+    console.log("/register: ", req.body);
     return this.authService.register(req.body)
   }
 
