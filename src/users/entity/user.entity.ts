@@ -49,11 +49,14 @@ export class User {
   @Column({default: ''})
   socketId: string;
 
-  @Column({  type:"datetime", nullable: true})
-  created_at?:  Date;
+  @Column({type:"datetime", nullable: true})
+  createdAt?:  Date;
 
-  @Column({  type:"datetime", nullable: true})
-  updated_at?:  Date;
+  @Column({type:"datetime", nullable: true})
+  updatedAt?:  Date;
+
+  @Column({nullable: true})
+  access_token: string;
 
   @OneToMany(() => Order, order => order.user)
   order: Order[]

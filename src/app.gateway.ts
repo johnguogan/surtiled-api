@@ -4,7 +4,8 @@ import {
   OnGatewayInit,
   WebSocketServer,
   OnGatewayConnection,
-  OnGatewayDisconnect
+  OnGatewayDisconnect,
+  MessageBody
 } from '@nestjs/websockets';
 
 import { Logger } from '@nestjs/common';
@@ -13,7 +14,7 @@ import { UsersService } from './users/users.service';
 import { ChattingService } from './chatting/chatting.service';
 import { rootCertificates } from 'tls';
 
-@WebSocketGateway(3006, { cors: true })
+@WebSocketGateway({ cors: true })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('AppGateway');
@@ -21,6 +22,13 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     private usersService: UsersService,
     private chattingService: ChattingService,
   ){}
+
+  // @SubscribeMessage('send_message')
+  // listenForMessages(@MessageBody() data: string) {
+  //   // this.server.sockets.emit('receive_message', data);
+  //   console.log("send_message: ", data);
+    
+  // }
 
   @SubscribeMessage('user')
   async handleConnect(client: Socket, payload: any): Promise<void> {
@@ -64,6 +72,8 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   }
 
   handleConnection(client: Socket, ...args: any[]) {
+    console.log("args: ", args);
+    
     this.logger.log(`Client connected: ${client.id}`)
   }
 

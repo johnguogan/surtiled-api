@@ -32,6 +32,11 @@ export class UsersService {
     return result
   }
 
+  async findOneByToken(access_token: string): Promise<User> {
+    const result = await this.usersRepository.findOne({where: {access_token}});
+    return result
+  }
+
   async findUsers(): Promise<User[]>{
     return await this.usersRepository.find();
   }
@@ -44,6 +49,10 @@ export class UsersService {
 
   async updateUser(data: any): Promise<UpdateResult> {
     return await this.usersRepository.update(data.id, data)
+  }
+
+  async updateUserToken(id, access_token): Promise<UpdateResult> {
+    return await this.usersRepository.update(id, {access_token})
   }
 
   async remove(id: number): Promise<void> {

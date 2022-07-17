@@ -19,11 +19,13 @@ import { FavoritesModule } from './favorites/favorites.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
+
       // host: 'priva230.spindns.com',
-      port: 3306,
+      // port: 3306,
       // username: 'nousproyec1_surtiled',
-      // password: 'XWU*-~7~H[]$',
+      // password: 'x!B[P.ry.mrx',
       // database: 'nousproyec1_surtiled',
+
       host: 'localhost',
       username: 'root',
       // password: 'surtiled',

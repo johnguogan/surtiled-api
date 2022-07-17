@@ -15,6 +15,13 @@ export class AuthController {
     return this.authService.login(req.body)
   }
 
+  @Post('loginbytoken')
+  async loginByToken(@Request() req) {
+    console.log("/loginByToken: ", req.body);
+    
+    return this.authService.loginByToken(req.body.access_token)
+  }
+
   @Post('register')
   async register(@Request() req) {
     console.log("/register: ", req.body);
