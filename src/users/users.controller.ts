@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards, Header, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards, Header, Param, Delete } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UpdateResult } from 'typeorm';
@@ -30,7 +30,7 @@ export class UsersController {
   findAll(): Promise<User[]> {
     const users = this.usersService.findUsers()
       .then(response => {
-        console.log("userlist: ", response);
+        // console.log("userlist: ", response);
         return response
       });
     return users;
@@ -54,5 +54,10 @@ export class UsersController {
         return response
       })
     return user
+  }
+
+  @Delete(':id')
+  removeUser(@Param('id') id: number) {
+    return this.usersService.removeUser(id)
   }
 }

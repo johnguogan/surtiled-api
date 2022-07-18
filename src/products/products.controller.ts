@@ -88,8 +88,8 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findProducts(@Param('id') id: number): Promise<any> {
-    const products = this.productsService.findProducts(id)
+  async findProducts(@Param('id') id: number): Promise<any> {
+    const products = await this.productsService.findProducts(id)
     return products
   }
 
@@ -102,8 +102,8 @@ export class ProductsController {
   @Delete(':id')
   // @UseGuards(JwtAuthGuard)
   delete(@Param('id') id: number) {
-    this.productsService.remove(id)
-    return {message: 'ok'}
+    return this.productsService.remove(id)
+    // return {message: 'ok'}
   }
 
   @Post('filter/services')

@@ -45,7 +45,7 @@ export class ProductsService {
     // });
     const result = this.categoryRepository.findOne({
       relations: ['products'],
-      where: {id},
+      where: {id, products: {active: true}},
     })
     .then((res) => {
       res.products = res.products.filter(item => item.type === 'product')
@@ -108,7 +108,7 @@ export class ProductsService {
     if(max > 0)
       result = result.filter((item: any) => item.price < max)
     
-    return result
+    return result.filter(item => item.active === true)
   }
 
   async filterServices(filtterList: any) {
@@ -163,13 +163,13 @@ export class ProductsService {
     if(max > 0)
       result = result.filter((item: any) => item.price < max)
     
-    return result
+    return result.filter(item => item.active === true)
   }
 
   async findServices(id: number): Promise<any>{
     const result = this.categoryRepository.findOne({
       relations: ['products'],
-      where: {id}
+      where: {id, products: {active: true}}
     })
     .then((res) => {
       res.products = res.products.filter(item => item.type === 'service')
@@ -204,6 +204,6 @@ export class ProductsService {
   }
 
   remove(id: number) {
-    return this.productRepository.delete({id})
+    return this.productRepository.update(id, {active:false})
   }
 }
