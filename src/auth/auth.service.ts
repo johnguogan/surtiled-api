@@ -36,15 +36,17 @@ export class AuthService {
 
   async loginByToken(token: string) {
     const userInfo = await this.usersService.findOneByToken(token);
-    const payload = { username: userInfo.names, sub: userInfo.userid};
-    const access_token = this.jwtService.sign(payload)
-    await this.usersService.updateUserToken(userInfo.id, access_token)
-    const {password, ...result} = userInfo
-
-    return {
-      user: result,
-      access_token
-    }
+    if(userInfo) {
+      const payload = { username: userInfo.names, sub: userInfo.userid};
+      const access_token = this.jwtService.sign(payload)
+      await this.usersService.updateUserToken(userInfo.id, access_token)
+      const {password, ...result} = userInfo
+      return {
+        user: result,
+        access_token
+      }
+    } else 
+      return false
   }
 
   async register(user: CreateUserDto) {

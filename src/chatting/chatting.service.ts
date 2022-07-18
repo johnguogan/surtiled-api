@@ -37,6 +37,8 @@ export class ChattingService {
     })).map(item => {
       let member = item.user2
       member['channelId'] = item.id
+      member['connected'] = member['socketId'] ? true: false
+        
       return member
     })
     let room1_members = rooms1.map(item => item.id)
@@ -82,7 +84,11 @@ export class ChattingService {
     }
     const chatUserList = chatUsers.filter(item => {
       return !room_member.includes(item.id)
+    }).map(item => {
+      item['connected'] = item.socketId ? true : false
+      return item
     })
+
 
     return [...chatUserList, ...rooms]
   }
@@ -101,6 +107,16 @@ export class ChattingService {
   }
 
   async createChannel (channelInfo: CreateChannelDto) {
+    let room = (await this.channelsRepository.find({
+      where: [
+        {user1: { id: channelInfo.user1}, user2: { id: channelInfo.user2}},
+        {user1: { id: channelInfo.user2}, user2: { id: channelInfo.user1}},
+      ]
+    }))
+
+    if (room.length > 0)
+      return room[0]
+
     const data = {}
     data['user1'] = await this.usersService.findOneById(channelInfo.user1)
     data['user2'] = await this.usersService.findOneById(channelInfo.user2)

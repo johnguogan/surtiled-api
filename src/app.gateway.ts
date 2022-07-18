@@ -14,7 +14,7 @@ import { UsersService } from './users/users.service';
 import { ChattingService } from './chatting/chatting.service';
 import { rootCertificates } from 'tls';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway(3006, { cors: true })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('AppGateway');
@@ -36,6 +36,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     const data = { id: payload.id, socketId: client.id}
     const user = await this.usersService.updateUser(data)
     console.log("updated User: ", user)
+    this.server.emit('user', {userid: payload.id, connected: true})
     
     // this.server.emit('message', payload);
     this.server.to(client.id).emit('user', {state: true, socketId: client.id})
@@ -56,7 +57,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
       
     room = await this.chattingService.getChannel(room.id)
     console.log("room data: ", room);
-    // console.log("socket data: ", client);
+    console.log("socket data: ", client);
     
     if(room.user1.socketId) 
       this.server.to(room.user1.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user1.socketId, messageId: newChat.id})
@@ -75,12 +76,18 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     console.log("args: ", args);
     
     this.logger.log(`Client connected: ${client.id}`)
+    console.log(`Client connected: ${client}`)
   }
 
   async handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
+    // client.leave(client.id)
+    client.disconnect(true)
+    // this.server.socketsLeave(client.id)
     const result = await this.usersService.disableUserSocket(client.id)
     console.log("user socket disabled: ", result);
-    
+    if(result) {
+      this.server.emit('user', {userid: result.id, connected: false})
+    }
   }
 }
