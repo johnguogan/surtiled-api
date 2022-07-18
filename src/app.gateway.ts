@@ -14,7 +14,7 @@ import { UsersService } from './users/users.service';
 import { ChattingService } from './chatting/chatting.service';
 import { rootCertificates } from 'tls';
 
-@WebSocketGateway(3006, { cors: true })
+@WebSocketGateway({ cors: true })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('AppGateway');
@@ -60,9 +60,9 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     console.log("socket data: ", client);
     
     if(room.user1.socketId) 
-      this.server.to(room.user1.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user1.socketId, messageId: newChat.id})
+      this.server.to(room.user1.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: newChat.createdAt, memberId, channelId: room.id, socketId: room.user1.socketId, messageId: newChat.id})
     if(room.user2.socketId) 
-      this.server.to(room.user2.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: new Date(), memberId, channelId: room.id, socketId: room.user2.socketId, messageId: newChat.id})
+      this.server.to(room.user2.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: newChat.createdAt, memberId, channelId: room.id, socketId: room.user2.socketId, messageId: newChat.id})
 
     // this.server.emit('message', payload);
     // this.server.to(client.id).emit('message', 'server to emit')
