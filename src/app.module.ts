@@ -28,8 +28,8 @@ import { FavoritesModule } from './favorites/favorites.module';
 
       host: 'localhost',
       username: 'root',
-      password: 'surtiled',
-      // password: '',
+      // password: 'surtiled',
+      password: '',
       database: 'surtiled_db',
       // entities: [User],
       autoLoadEntities: true,

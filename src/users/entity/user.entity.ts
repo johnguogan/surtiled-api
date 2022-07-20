@@ -37,10 +37,10 @@ export class User {
   @Column({nullable: true})
   residence: string;
 
-  @Column({nullable: true})
+  @Column()
   email: string;
   
-  @Column({nullable: true})
+  @Column()
   password: string;
 
   @Column()

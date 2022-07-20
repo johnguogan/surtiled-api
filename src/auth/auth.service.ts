@@ -22,16 +22,29 @@ export class AuthService {
   }
 
   async login(user: any) {
+    console.log("login info: ", user);
+    
     const userInfo = await this.usersService.findOne(user.userid);
-    const payload = { username: user.names, sub: user.userId};
-    const access_token = this.jwtService.sign(payload)
-    await this.usersService.updateUserToken(userInfo.id, access_token)
-    const {password, ...result} = userInfo
-
-    return {
-      user: result,
-      access_token
-    }
+    if(userInfo) {
+      const comp = await bcrypt.compare(user.password, userInfo.password)
+      if(comp) {
+        const payload = { username: user.names, sub: user.userId};
+        const access_token = this.jwtService.sign(payload)
+        await this.usersService.updateUserToken(userInfo.id, access_token)
+        const {password, ...result} = userInfo
+    
+        return {
+          user: result,
+          access_token
+        }
+      } else
+        return {
+          state: "Contraseña incorrecta"
+        }
+    } else 
+      return {
+        state: "No existe ningún usuario"
+      }
   }
 
   async loginByToken(token: string) {
@@ -53,15 +66,21 @@ export class AuthService {
     const exist = await this.usersService.findOne(user.userid)
     if(exist)
       return false
-    user.password = await bcrypt.hash(user.password, 10)
-    user['createdAt'] = new Date()
-    user['updatedAt'] = new Date()
-    let response = await this.usersService.create(user)
-    console.log("/register-result: ", response);
-    if (response) {
-      const { password, ...result } = response
-      return result
-    }
+    // const salt = bcrypt.genSalt(10)
+    // bcrypt.genSalt(10, (err, salt) => {
+      // bcrypt.hash(user.password, salt, async function(err, hash) {
+        const hash = await bcrypt.hash(user.password, 10)
+        user.password = hash
+        user['createdAt'] = new Date()
+        user['updatedAt'] = new Date()
+        let response = await this.usersService.create(user)
+        console.log("/register-result: ", response);
+        if (response) {
+          const { password, ...result } = response
+          return result
+        }
+      // })
+    // })
   }
 
   decodeToken(token: string): any {

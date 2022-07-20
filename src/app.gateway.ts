@@ -57,7 +57,9 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
       
     room = await this.chattingService.getChannel(room.id)
     console.log("room data: ", room);
-    console.log("socket data: ", client);
+    console.log("new chat: ", newChat.id, newChat);
+    
+    // console.log("socket data: ", client);
     
     if(room.user1.socketId) 
       this.server.to(room.user1.socketId).emit('message', {message: content, senderId: parseInt(id), createdAt: newChat.createdAt, memberId, channelId: room.id, socketId: room.user1.socketId, messageId: newChat.id})
@@ -69,7 +71,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   }
 
   afterInit(server: Server) {
-      this.logger.log('Init')
+    this.logger.log('Init')
   }
 
   handleConnection(client: Socket, ...args: any[]) {
