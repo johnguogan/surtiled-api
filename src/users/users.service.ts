@@ -48,7 +48,8 @@ export class UsersService {
   }
 
   async updateUser(data: any): Promise<UpdateResult> {
-    data['password'] = await bcrypt.hash(data['password'], 10)
+    if (data['password'])
+      data['password'] = await bcrypt.hash(data['password'], 10)
     data['updatedAt'] = new Date()
     return await this.usersRepository.update(data.id, data)
   }

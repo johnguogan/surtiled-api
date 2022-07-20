@@ -14,7 +14,7 @@ import { UsersService } from './users/users.service';
 import { ChattingService } from './chatting/chatting.service';
 import { rootCertificates } from 'tls';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway(3006, { cors: true })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('AppGateway');
