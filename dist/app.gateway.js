@@ -81,7 +81,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppGateway.prototype, "handleMessage", null);
 AppGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(3006, { cors: true }),
+    (0, websockets_1.WebSocketGateway)({ cors: true }),
     __metadata("design:paramtypes", [users_service_1.UsersService,
         chatting_service_1.ChattingService])
 ], AppGateway);
