@@ -1,0 +1,50 @@
+import { UpdateResult } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entity/user.entity';
+import { UsersService } from './users.service';
+export declare class UsersController {
+    private usersService;
+    constructor(usersService: UsersService);
+    create(createUserDto: CreateUserDto): Promise<{
+        createdAt: Date;
+        updatedAt: Date;
+        userid: string;
+        imageName?: string;
+        names: string;
+        surnames?: string;
+        typeId?: string;
+        idNumber?: string;
+        cell?: string;
+        conventional?: string;
+        residence?: string;
+        email?: string;
+        password?: string;
+        role: string;
+    } & User>;
+    getUser(data: any): Promise<{
+        id: number;
+        userid: string;
+        imageName: string;
+        names: string;
+        surnames: string;
+        imageLink: string;
+        typeId: string;
+        idNumber?: string;
+        cell: string;
+        conventional: string;
+        residence: string;
+        email: string;
+        role: string;
+        socketId: string;
+        createdAt?: Date;
+        updatedAt?: Date;
+        access_token: string;
+        order: import("../orders/entity/order.entity").Order[];
+        user1: import("../chatting/entity/channels.entity").Channel[];
+        user2: import("../chatting/entity/channels.entity").Channel[];
+    }>;
+    findAll(): Promise<User[]>;
+    addUser(data: any): Promise<any>;
+    updateUser(updateData: any): Promise<UpdateResult>;
+    removeUser(id: number): Promise<import("typeorm").DeleteResult>;
+}

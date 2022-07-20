@@ -1,0 +1,135 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OrdersService = void 0;
+const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const order_entity_1 = require("./entity/order.entity");
+const orderlist_entity_1 = require("./entity/orderlist.entity");
+const bankaccount_entity_1 = require("./entity/bankaccount.entity");
+const users_service_1 = require("../users/users.service");
+let OrdersService = class OrdersService {
+    constructor(orderRepository, orderListRepository, bankAccountRepository, usersService) {
+        this.orderRepository = orderRepository;
+        this.orderListRepository = orderListRepository;
+        this.bankAccountRepository = bankAccountRepository;
+        this.usersService = usersService;
+    }
+    async create(createOrderDto) {
+        const { products } = createOrderDto, order = __rest(createOrderDto, ["products"]);
+        const user = await this.usersService.findOneById(order.userId);
+        order['user'] = user;
+        const insertedOrder = await this.orderRepository.save(order);
+        console.log("insertedOrder order: ", order);
+        products.length > 0 && products.map(item => {
+            item['order'] = insertedOrder.id;
+            item['product'] = item.id;
+            item['id'] = 0;
+            this.orderListRepository.save(item);
+            return item;
+        });
+    }
+    async findOne(id) {
+        const order = await this.orderRepository.findOne({ where: { id } });
+        const result = await this.orderListRepository.find({
+            relations: ['product', 'order'],
+            where: { order: { id } },
+            select: {
+                product: {
+                    name: true,
+                    price: true,
+                    imageName: true,
+                },
+            }
+        });
+        const order_list = [];
+        result.map(item => {
+            let orderItem = {
+                quantity: item.quantity,
+                name: item.product.name,
+                imageName: item.product.imageName,
+                price: item.product.price
+            };
+            order_list.push(orderItem);
+        });
+        order['productList'] = order_list;
+        return order;
+    }
+    async findOrderProducts() {
+        return this.orderRepository.find({
+            relations: ['user', 'orderList'],
+            where: { delivered: false, type: 'product' },
+            select: {
+                id: true,
+                user: {
+                    names: true,
+                    surnames: true,
+                },
+            }
+        });
+    }
+    async findOrderServices() {
+        return this.orderRepository.find({
+            where: { delivered: false, type: 'service' }
+        });
+    }
+    async update(id, data) {
+        return await this.orderRepository.update({ id }, data);
+    }
+    async deliveryAction(id) {
+        const data = { delivered: true };
+        return await this.orderRepository.update({ id }, data);
+    }
+    async generateOrderNumber(id) {
+        const orderCount = await this.orderRepository.count({ where: { user: { id } } });
+        console.log("generateOrderNumber: ", id, orderCount);
+        return (new Date()).getFullYear() % 100 * 1000 + orderCount + 1 + id * 100000;
+    }
+    async registerBankAccount(createBankAccountDto) {
+        createBankAccountDto['id'] = 1;
+        const list = await this.bankAccountRepository.find();
+        if (list.length > 0)
+            return await this.bankAccountRepository.update(1, createBankAccountDto);
+        else
+            return await this.bankAccountRepository.save(createBankAccountDto);
+    }
+    async getBankAccount() {
+        const result = await this.bankAccountRepository.find();
+        return result;
+    }
+};
+OrdersService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(order_entity_1.Order)),
+    __param(1, (0, typeorm_1.InjectRepository)(orderlist_entity_1.OrderList)),
+    __param(2, (0, typeorm_1.InjectRepository)(bankaccount_entity_1.BankAccount)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository,
+        users_service_1.UsersService])
+], OrdersService);
+exports.OrdersService = OrdersService;
+//# sourceMappingURL=orders.service.js.map
