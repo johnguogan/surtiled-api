@@ -30,7 +30,7 @@ AppModule = __decorate([
                 type: 'mysql',
                 host: 'localhost',
                 username: 'root',
-                password: '',
+                password: 'surtiled',
                 database: 'surtiled_db',
                 autoLoadEntities: true,
                 synchronize: true,
