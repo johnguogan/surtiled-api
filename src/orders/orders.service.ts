@@ -27,6 +27,7 @@ export class OrdersService {
     const {products, ...order} = createOrderDto
     const user = await this.usersService.findOneById(order.userId)
     order['user'] = user
+    order['deliveredAt'] = new Date()
     const insertedOrder = await this.orderRepository.save(order)
     console.log("insertedOrder order: ", order);
     
