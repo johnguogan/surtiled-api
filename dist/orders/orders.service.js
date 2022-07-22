@@ -42,6 +42,7 @@ let OrdersService = class OrdersService {
         const { products } = createOrderDto, order = __rest(createOrderDto, ["products"]);
         const user = await this.usersService.findOneById(order.userId);
         order['user'] = user;
+        order['deliveredAt'] = new Date();
         const insertedOrder = await this.orderRepository.save(order);
         console.log("insertedOrder order: ", order);
         products.length > 0 && products.map(item => {
