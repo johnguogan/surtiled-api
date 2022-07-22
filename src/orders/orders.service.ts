@@ -40,7 +40,17 @@ export class OrdersService {
   }
 
   async findOne(id: number): Promise<any | undefined> {
-    const order = await this.orderRepository.findOne({where: {id}})
+    const order = await this.orderRepository.findOne({
+      relations: ['user'],
+      where: {id},
+      select: {
+        user: {
+          id: true,
+          socketId: true,
+          
+        }
+      }
+    })
 
     const result = await this.orderListRepository.find({
       relations: ['product', 'order'],
@@ -86,8 +96,15 @@ export class OrdersService {
 
   async findOrderServices(): Promise<Order[]> {
     return this.orderRepository.find({
-      // relations: ['orderList'],
-      where: { delivered: false, type: 'service'}
+      relations: ['user','orderList'],
+      where: { delivered: false, type: 'service'},
+      select: {
+        id: true,
+        user: {
+          names: true,
+          surnames: true,
+        },
+      }
     })
   }
 
@@ -95,9 +112,31 @@ export class OrdersService {
     return await this.orderRepository.update({id}, data)
   }
 
-  async deliveryAction(id:number) {
-    const data = { delivered: true }
-    return await this.orderRepository.update({id}, data)
+  deliveryAction(id:number) {
+    console.log("dilivery action: ", id)
+    const data = { delivered: true, deliveredAt: new Date() }
+    return this.orderRepository.update({id}, data)
+  }
+
+  acceptAction(id:number) {
+    const data = { accepted: true }
+    return this.orderRepository.update({id}, data)
+  }
+
+  receivedAction(id:number) {
+    const data = { received: true,  }
+    return this.orderRepository.update({id}, data)
+  }
+
+  getCompletedOrders(userid:number) {
+    return this.orderRepository.find({
+      where: {user: {id: userid}, delivered: true, received: false},
+      select: {
+        id: true,
+        orderNumber: true,
+        deliveredAt: true,
+      }
+    })
   }
 
   async generateOrderNumber(id: number) {

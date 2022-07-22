@@ -15,10 +15,12 @@ const common_1 = require("@nestjs/common");
 const socket_io_1 = require("socket.io");
 const users_service_1 = require("./users/users.service");
 const chatting_service_1 = require("./chatting/chatting.service");
+const orders_service_1 = require("./orders/orders.service");
 let AppGateway = class AppGateway {
-    constructor(usersService, chattingService) {
+    constructor(usersService, chattingService, ordersService) {
         this.usersService = usersService;
         this.chattingService = chattingService;
+        this.ordersService = ordersService;
         this.logger = new common_1.Logger('AppGateway');
     }
     async handleConnect(client, payload) {
@@ -45,6 +47,12 @@ let AppGateway = class AppGateway {
             this.server.to(room.user1.socketId).emit('message', { message: content, senderId: parseInt(id), createdAt: newChat.createdAt, memberId, channelId: room.id, socketId: room.user1.socketId, messageId: newChat.id });
         if (room.user2.socketId)
             this.server.to(room.user2.socketId).emit('message', { message: content, senderId: parseInt(id), createdAt: newChat.createdAt, memberId, channelId: room.id, socketId: room.user2.socketId, messageId: newChat.id });
+    }
+    async handleOrderComplete(client, payload) {
+        const { orderId, orderNumber, userId, socketId } = payload;
+        console.log("orderComplete: ", client.id, payload);
+        if (socketId)
+            this.server.to(socketId).emit('orderComplete', { orderId, userId, orderNumber });
     }
     afterInit(server) {
         this.logger.log('Init');
@@ -80,10 +88,17 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", Promise)
 ], AppGateway.prototype, "handleMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('orderComplete'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
+    __metadata("design:returntype", Promise)
+], AppGateway.prototype, "handleOrderComplete", null);
 AppGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ cors: true }),
+    (0, websockets_1.WebSocketGateway)(3006, { cors: true }),
     __metadata("design:paramtypes", [users_service_1.UsersService,
-        chatting_service_1.ChattingService])
+        chatting_service_1.ChattingService,
+        orders_service_1.OrdersService])
 ], AppGateway);
 exports.AppGateway = AppGateway;
 //# sourceMappingURL=app.gateway.js.map

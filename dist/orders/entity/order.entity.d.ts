@@ -13,6 +13,7 @@ export declare class Order {
     payment: string;
     receipt: string;
     type: string;
+    accepted: boolean;
     received: boolean;
     delivered: boolean;
     orderedAt: Date;

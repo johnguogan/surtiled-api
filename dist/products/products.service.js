@@ -66,28 +66,28 @@ let ProductsService = class ProductsService {
             case 'new':
                 productList = await this.productRepository.find({
                     relations: ['category'],
-                    where: { category: { id: category, type: 'product' } },
+                    where: { category: { id: category }, type: 'product' },
                     order: { 'createdAt': 'DESC' }
                 });
                 break;
             case 'old':
                 productList = await this.productRepository.find({
                     relations: ['category'],
-                    where: { category: { id: category, type: 'product' } },
+                    where: { category: { id: category }, type: 'product' },
                     order: { 'createdAt': 'ASC' }
                 });
                 break;
             case 'higher':
                 productList = await this.productRepository.find({
                     relations: ['category'],
-                    where: { category: { id: category, type: 'product' } },
+                    where: { category: { id: category }, type: 'product' },
                     order: { 'price': 'DESC' }
                 });
                 break;
             case 'lower':
                 productList = await this.productRepository.find({
                     relations: ['category'],
-                    where: { category: { id: category, type: 'product' } },
+                    where: { category: { id: category }, type: 'product' },
                     order: { 'price': 'ASC' }
                 });
                 break;

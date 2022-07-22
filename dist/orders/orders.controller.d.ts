@@ -16,6 +16,9 @@ export declare class OrdersController {
     getOrderNumber(id: number): Promise<number>;
     create(createOrderDto: CreateOrderDto): boolean;
     deliveryAction(id: number): Promise<import("typeorm").UpdateResult>;
+    acceptAction(id: number): Promise<import("typeorm").UpdateResult>;
+    completeAction(id: number): Promise<import("typeorm").UpdateResult>;
+    getCompletedOrder(id: number): Promise<Order[]>;
     registerBankAccount(data: CreateBankAccountDto): Promise<import("typeorm").UpdateResult | (CreateBankAccountDto & import("./entity/bankaccount.entity").BankAccount)>;
     getBankAccount(): Promise<any>;
 }

@@ -16,6 +16,9 @@ export declare class OrdersService {
     findOrderServices(): Promise<Order[]>;
     update(id: number, data: any): Promise<import("typeorm").UpdateResult>;
     deliveryAction(id: number): Promise<import("typeorm").UpdateResult>;
+    acceptAction(id: number): Promise<import("typeorm").UpdateResult>;
+    receivedAction(id: number): Promise<import("typeorm").UpdateResult>;
+    getCompletedOrders(userid: number): Promise<Order[]>;
     generateOrderNumber(id: number): Promise<number>;
     registerBankAccount(createBankAccountDto: CreateBankAccountDto): Promise<import("typeorm").UpdateResult | (CreateBankAccountDto & BankAccount)>;
     getBankAccount(): Promise<CreateBankAccountDto[]>;

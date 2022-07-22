@@ -13,6 +13,7 @@ import { Socket, Server } from 'socket.io'
 import { UsersService } from './users/users.service';
 import { ChattingService } from './chatting/chatting.service';
 import { rootCertificates } from 'tls';
+import { OrdersService } from './orders/orders.service';
 
 @WebSocketGateway({ cors: true })
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -21,6 +22,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   constructor(
     private usersService: UsersService,
     private chattingService: ChattingService,
+    private ordersService: OrdersService,
   ){}
 
   // @SubscribeMessage('send_message')
@@ -69,6 +71,16 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     // this.server.emit('message', payload);
     // this.server.to(client.id).emit('message', 'server to emit')
   }
+
+  @SubscribeMessage('orderComplete')
+  async handleOrderComplete(client: Socket, payload: any): Promise<void> {
+    const {orderId, orderNumber, userId, socketId} = payload
+    console.log("orderComplete: ", client.id, payload);
+    
+    if(socketId)
+      this.server.to(socketId).emit('orderComplete', {orderId, userId, orderNumber})
+  }
+  
 
   afterInit(server: Server) {
     this.logger.log('Init')

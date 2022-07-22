@@ -56,6 +56,21 @@ export class OrdersController {
     return this.ordersService.deliveryAction(id)
   }
 
+  @Post('accept/:id')
+  acceptAction(@Param('id') id: number) {
+    return this.ordersService.acceptAction(id)
+  }
+
+  @Post('received/:id')
+  completeAction(@Param('id') id: number) {
+    return this.ordersService.receivedAction(id)
+  }
+
+  @Get('completed/:id')
+  getCompletedOrder(@Param('id') id: number) {
+    return this.ordersService.getCompletedOrders(id)
+  }
+
   @Post('bank/add')
   registerBankAccount(@Body() data: CreateBankAccountDto) {
     return this.ordersService.registerBankAccount(data)

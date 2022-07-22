@@ -49,6 +49,15 @@ let OrdersController = class OrdersController {
     deliveryAction(id) {
         return this.ordersService.deliveryAction(id);
     }
+    acceptAction(id) {
+        return this.ordersService.acceptAction(id);
+    }
+    completeAction(id) {
+        return this.ordersService.receivedAction(id);
+    }
+    getCompletedOrder(id) {
+        return this.ordersService.getCompletedOrders(id);
+    }
     registerBankAccount(data) {
         return this.ordersService.registerBankAccount(data);
     }
@@ -105,6 +114,27 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "deliveryAction", null);
+__decorate([
+    (0, common_1.Post)('accept/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "acceptAction", null);
+__decorate([
+    (0, common_1.Post)('received/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "completeAction", null);
+__decorate([
+    (0, common_1.Get)('completed/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "getCompletedOrder", null);
 __decorate([
     (0, common_1.Post)('bank/add'),
     __param(0, (0, common_1.Body)()),

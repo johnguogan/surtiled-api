@@ -44,6 +44,9 @@ export class Order {
   type: string;
 
   @Column({default: false})
+  accepted: boolean;
+  
+  @Column({default: false})
   received: boolean;
   
   @Column({default: false})

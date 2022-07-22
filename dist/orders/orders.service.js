@@ -53,7 +53,16 @@ let OrdersService = class OrdersService {
         });
     }
     async findOne(id) {
-        const order = await this.orderRepository.findOne({ where: { id } });
+        const order = await this.orderRepository.findOne({
+            relations: ['user'],
+            where: { id },
+            select: {
+                user: {
+                    id: true,
+                    socketId: true,
+                }
+            }
+        });
         const result = await this.orderListRepository.find({
             relations: ['product', 'order'],
             where: { order: { id } },
@@ -93,15 +102,42 @@ let OrdersService = class OrdersService {
     }
     async findOrderServices() {
         return this.orderRepository.find({
-            where: { delivered: false, type: 'service' }
+            relations: ['user', 'orderList'],
+            where: { delivered: false, type: 'service' },
+            select: {
+                id: true,
+                user: {
+                    names: true,
+                    surnames: true,
+                },
+            }
         });
     }
     async update(id, data) {
         return await this.orderRepository.update({ id }, data);
     }
-    async deliveryAction(id) {
-        const data = { delivered: true };
-        return await this.orderRepository.update({ id }, data);
+    deliveryAction(id) {
+        console.log("dilivery action: ", id);
+        const data = { delivered: true, deliveredAt: new Date() };
+        return this.orderRepository.update({ id }, data);
+    }
+    acceptAction(id) {
+        const data = { accepted: true };
+        return this.orderRepository.update({ id }, data);
+    }
+    receivedAction(id) {
+        const data = { received: true, };
+        return this.orderRepository.update({ id }, data);
+    }
+    getCompletedOrders(userid) {
+        return this.orderRepository.find({
+            where: { user: { id: userid }, delivered: true, received: false },
+            select: {
+                id: true,
+                orderNumber: true,
+                deliveredAt: true,
+            }
+        });
     }
     async generateOrderNumber(id) {
         const orderCount = await this.orderRepository.count({ where: { user: { id } } });

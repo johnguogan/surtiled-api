@@ -66,6 +66,10 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
+], Order.prototype, "accepted", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
 ], Order.prototype, "received", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: false }),
